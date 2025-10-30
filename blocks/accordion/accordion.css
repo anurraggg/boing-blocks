@@ -30,6 +30,7 @@
     align-items: center;
     justify-content: space-between;
     width: 100%;
+    min-height: 44px; /* Touch target minimum for mobile */
     padding: var(--accordion-padding);
     background: var(--accordion-background);
     border: none;
@@ -84,9 +85,50 @@
     margin: 0 0 var(--accordion-spacing);
   }
   
+  /* Mobile Responsiveness: Under 900px (tablets/small desktops) */
   @media (max-width: 900px) {
     .accordion {
-      --accordion-padding: 0.75rem;
-      --accordion-panel-padding: 0.75rem;
+      --accordion-spacing: 0.75rem;
+      --accordion-transition: all 0.25s ease; /* Snappier on mobile */
+      --accordion-padding: 1rem; /* Increased for touch */
+      --accordion-panel-padding: 1rem;
+      --accordion-heading-size: 1rem; /* Slightly smaller headings */
+    }
+  
+    .accordion .accordion-button {
+      min-height: 48px; /* Larger touch target */
+      padding: 1rem 1.25rem; /* More horizontal space */
+    }
+  
+    .accordion .accordion-button::after {
+      --accordion-arrow-size: 1.125rem; /* Bigger arrow for thumbs */
+    }
+  
+    .accordion .accordion-panel p {
+      font-size: 0.875rem; /* Smaller body text to fit screens */
+      line-height: 1.5;
+    }
+  }
+  
+  /* Extra Small Mobile: Under 600px (phones in portrait) */
+  @media (max-width: 600px) {
+    .accordion {
+      --accordion-padding: 0.875rem;
+      --accordion-panel-padding: 0.875rem;
+      --accordion-heading-size: 0.9375rem; /* Even smaller for tiny screens */
+    }
+  
+    .accordion .accordion-button {
+      padding: 0.875rem 1rem;
+      min-height: 44px; /* Still accessible */
+    }
+  
+    .accordion .accordion-item {
+      --accordion-border-radius: 0.375rem; /* Softer corners on small devices */
+    }
+  
+    .accordion .accordion-panel {
+      padding-left: 0.875rem;
+      padding-right: 0.875rem;
     }
   }
