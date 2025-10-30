@@ -18,28 +18,35 @@ export default async function decorate(block) {
     return;
   }
 
-  console.log('Banner rows detected:', rows.length, 'Content preview:', rows.map(r => r.textContent.trim().substring(0, 30) + '...')); // Debug log
+  // Convert to Array for .map/.find compatibility
+  const rowArray = [...rows];
+
+  console.log('Banner rows detected:', rowArray.length, 'Content preview:', rowArray.map(r => r.textContent.trim().substring(0, 30) + '...')); // Debug log
 
   let imageUrl = '';
   let textContent = '';
+  let textRow = null; // Track for innerHTML
 
   // Auto-detect: Check if first row looks like URL (http, /, icons/, etc.)
   const urlPattern = /^(https?:\/\/|\/|\.\/|icons\/)/i;
   if (urlPattern.test(rows[0].textContent.trim())) {
     imageUrl = rows[0].textContent.trim();
-    textContent = rows[1]?.textContent.trim() || '';
+    textRow = rows[1];
+    textContent = textRow ? textRow.textContent.trim() : '';
   } else if (rows.length >= 2 && urlPattern.test(rows[1].textContent.trim())) {
     // Swapped: Row 1=text, Row 2=URL
-    textContent = rows[0].textContent.trim();
+    textRow = rows[0];
+    textContent = textRow ? textRow.textContent.trim() : '';
     imageUrl = rows[1].textContent.trim();
     console.log('Banner: Auto-swapped rows for URL detection.'); // Debug
   } else {
     // Only text? Use as text, no image
-    textContent = rows[0].textContent.trim();
+    textRow = rows[0];
+    textContent = textRow ? textRow.textContent.trim() : '';
   }
 
   // Hide originals
-  rows.forEach(row => row.style.display = 'none');
+  rowArray.forEach(row => row.style.display = 'none');
 
   // Create image if URL valid
   if (imageUrl) {
@@ -54,16 +61,16 @@ export default async function decorate(block) {
   }
 
   // Add text div if content
-  if (textContent) {
+  if (textContent && textRow) {
     const textDiv = document.createElement('div');
     textDiv.classList.add('banner-text');
-    textDiv.innerHTML = rows.find(r => r.textContent.trim() === textContent)?.innerHTML || textContent; // Preserve rich text
+    textDiv.innerHTML = textRow.innerHTML; // Preserve rich text from the correct row
     block.appendChild(textDiv);
     console.log('Banner text added:', textContent.substring(0, 50) + '...'); // Debug
   }
 
   // Clean up
-  rows.forEach(row => row.remove());
+  rowArray.forEach(row => row.remove());
 
   // Mark loaded
   block.dataset.blockStatus = 'loaded';
