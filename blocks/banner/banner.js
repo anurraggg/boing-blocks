@@ -6,8 +6,6 @@ import { createOptimizedPicture } from '../../scripts/aem.js'; // From AEM boile
  * @param {Element} block The banner block element
  */
 export default async function decorate(block) {
-  console.log('Banner decorate started for block:', block); // Debug: Confirm entry
-
   // Get rows: Prioritize table cells, fallback to children
   let rows = block.querySelectorAll('div > div'); // Table rows
   if (rows.length === 0) {
@@ -16,70 +14,77 @@ export default async function decorate(block) {
     ); // Paragraphs/headings
   }
 
-  const rowArray = Array.from(rows); // Always convert to Array
-
-  console.log('Banner rows detected:', rowArray.length, 
-    'Full HTML preview:', rowArray.map(r => ({ tag: r.tagName, text: r.textContent.trim().substring(0, 50) + '...' }))); // Detailed debug
+  const rowArray = Array.from(rows); // Convert to Array
 
   if (rowArray.length === 0) {
-    console.warn('Banner: No rows/children found—rendering block as-is.');
     block.dataset.blockStatus = 'loaded';
     return;
   }
 
   let imageUrl = '';
-  let textRow = null;
-  let textContent = '';
+  let textHTML = ''; // Full innerHTML from best text row
 
-  // Auto-detect URL (first/last row that matches pattern)
-  const urlPattern = /^(https?:\/\/|\/|\.\/|icons\/)/i;
-  const urlRowIndex = rowArray.findIndex(row => urlPattern.test(row.textContent.trim()));
+  // Normalize paths: Replace backslashes with forward slashes
+  const normalizePath = (path) => path.replace(/\\/g, '/').trim();
+
+  // Broader URL detection: Contains path + image ext (e.g., /icons/file.png or icons/file.png)
+  const urlPattern = /\/?.*\.(png|jpg|jpeg|gif|svg|webp)$/i; // Matches /icons/... or icons/...
+
+  // Find URL row (first match)
+  let urlRowIndex = -1;
+  for (let i = 0; i < rowArray.length; i++) {
+    const candidate = normalizePath(rowArray[i].textContent);
+    if (urlPattern.test(candidate)) {
+      urlRowIndex = i;
+      break; // Take first match
+    }
+  }
   
   if (urlRowIndex !== -1) {
-    imageUrl = rowArray[urlRowIndex].textContent.trim();
-    // Text is everything else
-    textRow = rowArray.find(row => row !== rowArray[urlRowIndex]);
-    textContent = textRow ? textRow.textContent.trim() : '';
-    console.log(`Banner: URL found at index ${urlRowIndex}, imageUrl: ${imageUrl.substring(0, 50)}...`);
-  } else {
-    // No URL: Treat first as text, rest as fallback
-    textRow = rowArray[0];
-    textContent = textRow ? textRow.textContent.trim() : '';
-    console.log('Banner: No URL detected—using as text-only.');
+    imageUrl = normalizePath(rowArray[urlRowIndex].textContent);
+    console.log('Banner URL detected:', imageUrl, 'at index', urlRowIndex); // Temp log
   }
 
-  // Create image if URL valid (do this first, no hiding yet)
+  // Find best text: First/largest non-URL row with content (no Set dup, direct innerHTML)
+  let bestTextRow = null;
+  let maxLength = 0;
+  rowArray.forEach((row, i) => {
+    if (i !== urlRowIndex && row.textContent.trim().length > maxLength) {
+      maxLength = row.textContent.trim().length;
+      bestTextRow = row;
+    }
+  });
+
+  if (bestTextRow) {
+    textHTML = bestTextRow.innerHTML; // Full rich HTML (bold, etc.)
+    console.log('Banner text selected from row', rowArray.indexOf(bestTextRow), 'length:', maxLength); // Temp log
+  }
+
+  // Create image if URL valid (prepend first)
   if (imageUrl) {
     try {
-      const alt = block.dataset.alt || (textContent ? `Banner image for ${textContent.substring(0, 50)}...` : 'Banner image');
+      const alt = block.dataset.alt || (textHTML ? `Banner image for ${bestTextRow.textContent.trim().substring(0, 50)}...` : 'Banner image');
       const picture = createOptimizedPicture(imageUrl, alt, true); // Eager load
       block.prepend(picture);
-      console.log('Banner: Image prepended successfully.');
     } catch (error) {
       console.error('Banner: Failed to create image:', error, imageUrl);
     }
   }
 
-  // Add text if available (append after image)
-  if (textContent && textRow) {
+  // Append single text div (only if valid text, no path)
+  if (textHTML && textHTML.trim() && !urlPattern.test(textHTML)) { // Double-check no path in HTML
     const textDiv = document.createElement('div');
     textDiv.classList.add('banner-text');
-    textDiv.innerHTML = textRow.innerHTML; // Preserve formatting
+    textDiv.innerHTML = textHTML;
     block.appendChild(textDiv);
-    console.log('Banner: Text appended:', textContent.substring(0, 50) + '...');
-  } else if (rowArray.length > 0) {
-    // Fallback: Append all original children if no text detected
-    console.log('Banner: Fallback—appending original content.');
-    rowArray.forEach(child => block.appendChild(child.cloneNode(true)));
   }
 
-  // NOW hide/remove originals (only if we added something)
-  if (imageUrl || textContent) {
+  // Remove originals only if we added new content
+  if (imageUrl || textHTML) {
     rowArray.forEach(row => {
       if (row.parentNode) row.remove();
     });
   }
 
-  console.log('Banner decorate complete.'); // Debug end
   block.dataset.blockStatus = 'loaded';
 }
