@@ -1,0 +1,106 @@
+/* carousel.css */
+.carousel {
+    --carousel-height: 400px;
+    --carousel-transition: 300ms ease;
+    --carousel-color: #fff;
+    --carousel-bg: #000;
+    --carousel-indicator-size: 8px;
+    --carousel-indicator-active: #ff6b35;
+    --carousel-arrow-size: 2rem;
+    --carousel-padding: 1rem;
+    --carousel-gap: 1rem;
+  }
+  
+  .carousel .swiper {
+    width: 100%;
+    height: var(--carousel-height);
+  }
+  
+  .carousel .swiper-slide {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--carousel-bg);
+    overflow: hidden;
+    border-radius: 0.5rem;
+  }
+  
+  .carousel .swiper-slide img,
+  .carousel .swiper-slide video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Crop to fill; change to 'contain' for full view */
+    border-radius: 0.5rem;
+  }
+  
+  .carousel .swiper-slide video {
+    background: #000;
+  }
+  
+  .carousel .swiper-slide .slide-content {
+    position: absolute;
+    bottom: 1rem;
+    left: 1rem;
+    right: 1rem;
+    color: var(--carousel-color);
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+    z-index: 2;
+  }
+  
+  .carousel .swiper-slide .slide-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin: 0 0 0.5rem 0;
+  }
+  
+  .carousel .swiper-slide .slide-desc {
+    font-size: 0.875rem;
+    opacity: 0.9;
+    margin: 0;
+  }
+  
+  /* Pagination */
+  .carousel .swiper-pagination-bullet {
+    width: var(--carousel-indicator-size);
+    height: var(--carousel-indicator-size);
+    background: rgba(255, 255, 255, 0.5);
+    opacity: 0.5;
+    transition: var(--carousel-transition);
+  }
+  
+  .carousel .swiper-pagination-bullet-active {
+    background: var(--carousel-indicator-active);
+    opacity: 1;
+  }
+  
+  /* Navigation Arrows */
+  .carousel .swiper-button-next,
+  .carousel .swiper-button-prev {
+    color: var(--carousel-color);
+    width: var(--carousel-arrow-size);
+    height: var(--carousel-arrow-size);
+    margin-top: calc(-1 * var(--carousel-arrow-size) / 2);
+  }
+  
+  .carousel .swiper-button-next:after,
+  .carousel .swiper-button-prev:after {
+    font-size: var(--carousel-arrow-size);
+    font-weight: bold;
+  }
+  
+  /* Mobile */
+  @media (max-width: 900px) {
+    .carousel {
+      --carousel-height: 300px;
+      --carousel-padding: 0.5rem;
+    }
+  
+    .carousel .swiper-slide .slide-title {
+      font-size: 1.125rem;
+    }
+  
+    .carousel .swiper-button-next,
+    .swiper-button-prev {
+      display: none; /* Hide arrows on mobile; use swipe */
+    }
+  }
