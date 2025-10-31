@@ -1,8 +1,5 @@
-/* * The main block container.
- * This element becomes the frame.
- * (This part is unchanged)
- */
- .doodle-card.block {
+/* --- YOUR DESKTOP STYLES (Unchanged) --- */
+.doodle-card.block {
     position: relative; /* This is the anchor for the child element */
     width: 100%;
     max-width: 500px; /* You can adjust this max-width */
@@ -20,10 +17,10 @@
     background-position: center;
   }
   
-  /* * --- THIS IS YOUR EXACT ALIGNMENT CODE ---
-   * This is the <div> container for the image YOU provide.
-   * We are now using your rotation and positioning logic.
-   */
+  /* * --- YOUR EXACT ALIGNMENT CODE ---
+    * This is the <div> container for the image YOU provide.
+    * We are now using your rotation and positioning logic.
+    */
   .doodle-card-image {
     position: absolute;
     overflow: hidden; /* Keep this to clip the corners */
@@ -44,10 +41,10 @@
   }
   
   /*
-   * --- THIS IS YOUR EXACT IMAGE FIT CODE ---
-   * This styles the <picture> or <img> element
-   * that YOU provide, using your 'contain' preference.
-   */
+    * --- YOUR EXACT IMAGE FIT CODE ---
+    * This styles the <picture> or <img> element
+    * that YOU provide, using your 'contain' preference.
+    */
   .doodle-card-image picture,
   .doodle-card-image img {
     width: 60%;
@@ -55,63 +52,124 @@
     /* Your 'object-fit' style: */
     object-fit: contain; 
   }
+  
+  /* --- YOUR CONTENT STYLES (Unchanged) --- */
+  /* This container holds the title, description, and button */
+  .doodle-card-content {
+    position: absolute;
+    /* Positioned from the bottom-left of the yellow card */
+    bottom: 3%;
+    left: 10%;
+    width: 55%; /* Give it some space */
+    z-index: 5;
+    color: #000;
+    text-align: left;
+  }
+  
+  .doodle-card-title {
+    font-size: var(--heading-font-size-m);
+    font-weight: 700;
+    margin: 0 0 8px;
+    line-height: 1.2;
+  }
+  
+  .doodle-card-description {
+    font-size: var(--body-font-size-s);
+    margin: 0 0 16px;
+    line-height: 1.5;
+  }
+  
+  .doodle-card-share-button {
+    background-color: #fff;
+    border: 2px solid #000;
+    border-radius: 30px; /* Makes it pill-shaped */
+    padding: 8px 20px 8px 16px; /* Extra space on left for icon */
+    font-weight: 700;
+    font-size: var(--body-font-size-s);
+    color: #000;
+    cursor: pointer;
+    display: inline-flex; /* Use flex to align icon and text */
+    align-items: center;
+    gap: 8px; /* Space between icon and text */
+    transition: all 0.2s;
+  }
+  
+  .doodle-card-share-button:hover {
+    background-color: #f0f0f0;
+    transform: scale(1.05);
+  }
+  
+  /* Style the <span> holding the icon */
+  .doodle-card-share-button .icon {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+  }
+  
+  /* Style the <img> tag loaded inside the span */
+  .doodle-card-share-button .icon img {
+    width: 100%;
+    height: 100%;
+  }
+  
+  /* * ===============================================
+   * --- NEW MOBILE FIX - ADD THIS AT THE BOTTOM --- 
+   * ===============================================
+   */
+  @media (max-width: 600px) {
+  
+    /* * 1. Make the block's height auto so it can grow
+     * to fit the content stacked below it.
+     * We also add padding-bottom to make sure the
+     * star is visible below the text.
+     */
+    .doodle-card.block {
+      height: auto;
+      /* We keep the aspect-ratio to show the background frame */
+      aspect-ratio: 3 / 4; 
+      padding-bottom: 30%; /* This adds space for the text */
+    }
+  
+    /* * 2. We leave your .doodle-card-image styles ALONE.
+     * It stays position: absolute, rotated, and aligned.
+     */
+  
+    /* * 3. We change the content to stack *below* the frame.
+     * We change 'position: absolute' to 'position: relative'.
+     */
+    .doodle-card-content {
+        position: absolute;
+        bottom: 3%;
+        left: 10%;
+        width: 55%;
+        z-index: 5;
+        color: #000;
+        text-align: left; /* Center text */
+    }
+  
+    /* 4. Optional: Make text smaller on mobile */
+    .doodle-card-title {
+      font-size: 20px; /* You can change to -s if too big */
+    }
+  
+    .doodle-card-description {
+      font-size: 13px;
+      left: 10%;
+    }
 
-/* --- NEW STYLES ADDED BELOW --- */
-
-/* This container holds the title, description, and button */
-.doodle-card-content {
-  position: absolute;
-  /* Positioned from the bottom-left of the yellow card */
-  bottom: 12%;
-  left: 10%;
-  width: 55%; /* Give it some space */
-  z-index: 5;
-  color: #000;
-  text-align: left;
-}
-
-.doodle-card-title {
-  font-size: var(--heading-font-size-m);
-  font-weight: 700;
-  margin: 0 0 8px;
-  line-height: 1.2;
-}
-
-.doodle-card-description {
-  font-size: var(--body-font-size-s);
-  margin: 0 0 16px;
-  line-height: 1.5;
-}
-
-.doodle-card-share-button {
-  background-color: #fff;
-  border: 2px solid #000;
-  border-radius: 30px; /* Makes it pill-shaped */
-  padding: 8px 20px 8px 16px; /* Extra space on left for icon */
-  font-weight: 700;
-  font-size: var(--body-font-size-s);
-  color: #000;
-  cursor: pointer;
-  display: inline-flex; /* Use flex to align icon and text */
-  align-items: center;
-  gap: 8px; /* Space between icon and text */
-  transition: all 0.2s;
-}
-
-.doodle-card-share-button:hover {
-  background-color: #f0f0f0;
-  transform: scale(1.05);
-}
-
-/* Style the <span> holding the icon */
-.doodle-card-share-button .icon {
-  display: inline-block;
-  width: 16px;
-  height: 16px;
-}
-
-/* Style the <img> tag loaded inside the span */
-.doodle-card-share-button .icon img {
-  width: 100%;
-  height: 100%;
-}
+    .doodle-card-share-button{
+        background-color: #fff;
+        border: 2px solid #000;
+        border-radius: 30px;
+        padding: 7px 15px 7px 15px;
+        font-weight: 700;
+        font-size: var(--body-font-size-s);
+        color: #000;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        transition: all 0.2s;
+        margin-bottom: 15px;
+    }
+  }
