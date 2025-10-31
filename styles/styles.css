@@ -255,3 +255,7 @@ main .section.highlight {
   margin: 0;
   padding: 40px 0;
 }
+
+.section.feature-card-container{
+  padding-top: 35px;
+}

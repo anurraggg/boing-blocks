@@ -300,13 +300,15 @@ function getMetadata(name, doc = document) {
  * @param {string} [alt] The image alternative text
  * @param {boolean} [eager] Set loading attribute to eager
  * @param {Array} [breakpoints] Breakpoints and corresponding params (eg. width)
+ * @param {string} [optimize] The optimization level (e.g., 'medium', 'high', 'max' or 'off')
  * @returns {Element} The picture element
  */
-function createOptimizedPicture(
+ function createOptimizedPicture(
   src,
   alt = '',
   eager = false,
   breakpoints = [{ media: '(min-width: 600px)', width: '2000' }, { width: '750' }],
+  optimize = 'medium', // <-- NEW PARAMETER
 ) {
   const url = new URL(src, window.location.href);
   const picture = document.createElement('picture');
@@ -318,7 +320,11 @@ function createOptimizedPicture(
     const source = document.createElement('source');
     if (br.media) source.setAttribute('media', br.media);
     source.setAttribute('type', 'image/webp');
-    source.setAttribute('srcset', `${pathname}?width=${br.width}&format=webply&optimize=medium`);
+    // Use the optimize variable. If 'off', don't add the param.
+    const srcset = (optimize === 'off')
+      ? `${pathname}?width=${br.width}&format=webply`
+      : `${pathname}?width=${br.width}&format=webply&optimize=${optimize}`;
+    source.setAttribute('srcset', srcset);
     picture.appendChild(source);
   });
 
@@ -327,17 +333,24 @@ function createOptimizedPicture(
     if (i < breakpoints.length - 1) {
       const source = document.createElement('source');
       if (br.media) source.setAttribute('media', br.media);
-      source.setAttribute('srcset', `${pathname}?width=${br.width}&format=${ext}&optimize=medium`);
+      // Use the optimize variable
+      const srcset = (optimize === 'off')
+        ? `${pathname}?width=${br.width}&format=${ext}`
+        : `${pathname}?width=${br.width}&format=${ext}&optimize=${optimize}`;
+      source.setAttribute('srcset', srcset);
       picture.appendChild(source);
     } else {
       const img = document.createElement('img');
       img.setAttribute('loading', eager ? 'eager' : 'lazy');
       img.setAttribute('alt', alt);
       picture.appendChild(img);
-      img.setAttribute('src', `${pathname}?width=${br.width}&format=${ext}&optimize=medium`);
+      // Use the optimize variable
+      const imgSrc = (optimize === 'off')
+        ? `${pathname}?width=${br.width}&format=${ext}`
+        : `${pathname}?width=${br.width}&format=${ext}&optimize=${optimize}`;
+      img.setAttribute('src', imgSrc);
     }
   });
-
   return picture;
 }
 
