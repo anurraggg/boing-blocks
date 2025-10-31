@@ -1,0 +1,57 @@
+/* * The main block container.
+ * This element becomes the frame.
+ * (This part is unchanged)
+ */
+ .doodle-card.block {
+    position: relative; /* This is the anchor for the child element */
+    width: 100%;
+    max-width: 500px; /* You can adjust this max-width */
+    margin: 20px auto; /* Center the card */
+    
+    /* * This forces the block to have the same aspect ratio as the background image.
+     * I've estimated 3:4. You can adjust this if the frame looks stretched.
+     */
+    aspect-ratio: 3 / 4; 
+    
+    /* Load the frame image from this block's folder */
+    background-image: url('doodle_card_bg.jpg');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+  }
+  
+  /* * --- THIS IS THE UPDATED PART ---
+   * This is the <div> container for the image YOU provide.
+   * We are now using your rotation and positioning logic.
+   */
+  .doodle-card-image {
+    position: absolute;
+    overflow: hidden; /* Keep this to clip the corners */
+  
+    /* Your positioning CSS: */
+    top: 42.5%;
+    left: 68%;
+    transform: translate(-50%, -50%) rotate(10.7deg);
+    
+    /* Your border/radius CSS: */
+    border-radius: .75rem;
+  
+    /* * We still need to set the size relative to the frame.
+     * These percentages are based on the gray area's size.
+     */
+    width: 76%;
+    height: 67%;
+  }
+  
+  /*
+   * --- THIS IS ALSO UPDATED ---
+   * This styles the <picture> or <img> element
+   * that YOU provide, using your 'contain' preference.
+   */
+  .doodle-card-image picture,
+  .doodle-card-image img {
+    width: 60%;
+    height: 100%;
+    /* Your 'object-fit' style: */
+    object-fit: contain; 
+  }
