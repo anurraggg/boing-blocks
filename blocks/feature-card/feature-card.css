@@ -1,0 +1,54 @@
+/* The main block container */
+.feature-card.block {
+    width: 100%;
+  }
+  
+  /* The <ul> list that holds all the cards */
+  .feature-card-list {
+    list-style: none; /* Removes bullet points */
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Center-align all cards horizontally */
+    gap: 32px; /* Adds vertical space between each card */
+  }
+  
+  /* Each <li> item (a single card) */
+  .feature-card-item {
+    width: 100%;
+    max-width: 800px; /* Sets a max-width for large screens */
+    text-align: center; /* Center-align all text inside the card */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px; /* Space between the image, title, and description */
+  }
+  
+  /* The card's image */
+  .feature-card-item .feature-card-image {
+    width: 100%;
+    height: auto;
+  }
+  
+  .feature-card-item .feature-card-image img {
+    width: 100%;
+    height: auto;
+    display: block; /* Fixes potential extra space below image */
+  }
+  
+  /* The card's title (e.g., "Tedhe Medhe News") */
+  .feature-card-item .feature-card-title {
+    font-size: var(--heading-font-size-m);
+    font-weight: 700;
+    color: #b42121; /* Red color to match your example */
+    margin: 0;
+  }
+  
+  /* The card's description text */
+  .feature-card-item .feature-card-description {
+    font-size: var(--body-font-size-m);
+    color: #333;
+    margin: 0;
+    line-height: 1.5;
+  }
