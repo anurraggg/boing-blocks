@@ -20,7 +20,7 @@
     background-position: center;
   }
   
-  /* * --- THIS IS THE UPDATED PART ---
+  /* * --- THIS IS YOUR EXACT ALIGNMENT CODE ---
    * This is the <div> container for the image YOU provide.
    * We are now using your rotation and positioning logic.
    */
@@ -44,7 +44,7 @@
   }
   
   /*
-   * --- THIS IS ALSO UPDATED ---
+   * --- THIS IS YOUR EXACT IMAGE FIT CODE ---
    * This styles the <picture> or <img> element
    * that YOU provide, using your 'contain' preference.
    */
@@ -55,3 +55,63 @@
     /* Your 'object-fit' style: */
     object-fit: contain; 
   }
+
+/* --- NEW STYLES ADDED BELOW --- */
+
+/* This container holds the title, description, and button */
+.doodle-card-content {
+  position: absolute;
+  /* Positioned from the bottom-left of the yellow card */
+  bottom: 12%;
+  left: 10%;
+  width: 55%; /* Give it some space */
+  z-index: 5;
+  color: #000;
+  text-align: left;
+}
+
+.doodle-card-title {
+  font-size: var(--heading-font-size-m);
+  font-weight: 700;
+  margin: 0 0 8px;
+  line-height: 1.2;
+}
+
+.doodle-card-description {
+  font-size: var(--body-font-size-s);
+  margin: 0 0 16px;
+  line-height: 1.5;
+}
+
+.doodle-card-share-button {
+  background-color: #fff;
+  border: 2px solid #000;
+  border-radius: 30px; /* Makes it pill-shaped */
+  padding: 8px 20px 8px 16px; /* Extra space on left for icon */
+  font-weight: 700;
+  font-size: var(--body-font-size-s);
+  color: #000;
+  cursor: pointer;
+  display: inline-flex; /* Use flex to align icon and text */
+  align-items: center;
+  gap: 8px; /* Space between icon and text */
+  transition: all 0.2s;
+}
+
+.doodle-card-share-button:hover {
+  background-color: #f0f0f0;
+  transform: scale(1.05);
+}
+
+/* Style the <span> holding the icon */
+.doodle-card-share-button .icon {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+}
+
+/* Style the <img> tag loaded inside the span */
+.doodle-card-share-button .icon img {
+  width: 100%;
+  height: 100%;
+}
