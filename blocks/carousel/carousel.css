@@ -120,8 +120,8 @@
   top: 50%;
   transform: translateY(-50%);
   z-index: 20;
-  background: rgba(0, 0, 0, 0.4);
-  border: 1px solid rgba(255, 255, 255, 0.5);
+  background: #d9001d;
+  border: 2px solid white;
   border-radius: 50%;
   width: 44px;
   height: 44px;
@@ -129,7 +129,7 @@
   color: white;
   font-size: 24px;
   font-weight: bold;
-  line-height: 44px;
+  line-height: 35px;
   padding: 0;
   transition: background 0.3s;
 }
@@ -169,14 +169,14 @@
   width: 14px;
   height: 14px;
   border-radius: 50%;
-  background: #fff;
-  border: 2px solid #888;
+  background: black;
+  border: 2px solid white;
   padding: 0;
   cursor: pointer;
   transition: background 0.3s;
 }
 
 .carousel-dot.active {
-  background: #888;
+  background: #d9001d;
   border-color: #fff;
 }
