@@ -1,12 +1,14 @@
+import { createOptimizedPicture } from '../../scripts/aem.js';
+
 /**
  * Tries to extract a YouTube video ID and construct an embed URL.
  * @param {string} url The URL to check.
  * @returns {string|null} The embed URL or null.
  */
- function getYoutubeEmbedUrl(url) {
+function getYoutubeEmbedUrl(url) {
   let embedUrl = null;
   try {
-    const urlObj = new URL(url);
+    const urlObj = new URL(url, window.location.href); // Use window.location.href as base for relative URLs
     const { hostname, pathname, searchParams } = urlObj;
 
     let videoId = null;
@@ -50,6 +52,7 @@ function createShowbizBorder(side) {
 /**
  * Updates the carousel to show a specific slide.
  * @param {HTMLElement} block The carousel block element.
+ *Next, try to access the site and provide the token value:
  * @param {number} newIndex The index of the slide to show.
  * @param {number} totalSlides The total number of slides.
  */
@@ -58,6 +61,13 @@ function showSlide(block, newIndex, totalSlides) {
   const dots = block.querySelectorAll('.carousel-dot');
   
   const currentIndex = parseInt(block.dataset.currentIndex, 10);
+
+  // Stop any playing YouTube videos in the slide we are leaving
+  const currentSlide = slider.children[currentIndex];
+  const iframe = currentSlide.querySelector('iframe');
+  if (iframe) {
+    iframe.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*');
+  }
 
   // Remove active state from current slide and dot
   slider.children[currentIndex].classList.remove('active');
@@ -71,6 +81,13 @@ function showSlide(block, newIndex, totalSlides) {
   slider.children[newIndex].classList.add('active');
   dots[newIndex].classList.add('active');
   
+  // Autoplay YouTube video in the new active slide
+  const newSlide = slider.children[newIndex];
+  const newIframe = newSlide.querySelector('iframe');
+  if (newIframe) {
+    newIframe.contentWindow.postMessage('{"event":"command","func":"playVideo","args":""}', '*');
+  }
+
   slider.style.transform = `translateX(-${newIndex * 100}%)`;
   block.dataset.currentIndex = newIndex;
 }
@@ -87,11 +104,25 @@ export default async function decorate(block) {
     slide.className = 'carousel-slide';
     
     const link = row.querySelector('a');
-    
-    // Check if the cell content is JUST a link
-    if (link && row.textContent.trim() === link.textContent.trim()) {
-      const href = link.href;
-      const youtubeEmbedUrl = getYoutubeEmbedUrl(href); // Check for YouTube link
+    const text = row.textContent.trim();
+    let href = null;
+    let isMedia = false; // Flag to check if we handled it as media
+
+    // Check if the cell is JUST a link (authored as a hyperlink)
+    if (link && text === link.textContent.trim()) {
+      href = link.href;
+    } 
+    // Check if the cell is JUST text that LOOKS like a URL (authored as plain text)
+    else if (!link && (text.startsWith('https://') || text.startsWith('http://'))) {
+      href = text;
+    } 
+    // Check if the cell is JUST text that LOOKS like a relative path
+    else if (!link && text.startsWith('/')) {
+      href = text;
+    }
+
+    if (href) {
+      const youtubeEmbedUrl = getYoutubeEmbedUrl(href);
 
       if (href.endsWith('.mp4')) {
         // --- MP4 Video Slide ---
@@ -104,26 +135,36 @@ export default async function decorate(block) {
         video.muted = true;
         video.setAttribute('aria-label', 'carousel video slide');
         slide.append(video);
-      
+        isMedia = true;
+
       } else if (youtubeEmbedUrl) {
         // --- YouTube Video Slide ---
+        // We add &enablejsapi=1 to control the video
         slide.classList.add('carousel-slide-youtube');
         const iframe = document.createElement('iframe');
-        iframe.src = youtubeEmbedUrl;
-        iframe.width = '560'; // Will be overridden by CSS
-        iframe.height = '315'; // Will be overridden by CSS
+        iframe.src = `${youtubeEmbedUrl}&enablejsapi=1`;
+        iframe.width = '560';
+        iframe.height = '315';
         iframe.title = 'YouTube video player';
         iframe.frameBorder = '0';
         iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share';
         iframe.allowfullscreen = true;
         slide.append(iframe);
-      
-      } else {
-        // It's a link, but not a recognized video format, treat as content
-        slide.append(...row.children);
+        isMedia = true;
+
+      } else if (href.endsWith('.jpeg') || href.endsWith('.jpg') || href.endsWith('.png') || href.endsWith('.svg') || href.endsWith('.webp')) {
+        // --- Image path as text Slide ---
+        // Create an optimized picture from the text path
+        const pic = createOptimizedPicture(href, '', false); // alt text is empty, eager is false
+        slide.append(pic);
+        isMedia = true;
       }
-    } else {
-      // --- Standard Content Slide (image, text, etc.) ---
+    }
+
+    // --- Standard Content Slide (e.g., an INSERTED image or text) ---
+    if (!isMedia) {
+      // This will append the <picture> tag (if image was inserted)
+      // OR the plain text if it wasn't a media link.
       slide.append(...row.children);
     }
     
