@@ -1,31 +1,32 @@
 export default function decorate(block) {
-  // Create the menu icon (three lines)
+  // 1. Create the menu icon (three lines)
   const menuIcon = document.createElement('div');
   menuIcon.classList.add('header-menu-icon');
-  // You could add three span elements or use CSS for the lines
   menuIcon.innerHTML = '<span></span><span></span><span></span>'; 
   block.prepend(menuIcon); // Add to the far left
 
-  // Find the logo image which the author provided
-  const logoWrapper = block.querySelector('picture, img').closest('p');
-  if (logoWrapper) {
-      logoWrapper.classList.add('header-logo');
-      // If the logo needs to be a link, we'd wrap it here:
-      // const logoLink = document.createElement('a');
-      // logoLink.href = '/'; // Or a configurable link
-      // logoWrapper.replaceChild(logoLink, logoWrapper.firstElementChild);
-      // logoLink.appendChild(logoWrapper.firstElementChild);
+  // 2. Find the logo image and wrap it (FIX APPLIED HERE)
+  const logoElement = block.querySelector('picture, img');
+
+  if (logoElement) {
+      // If the logo element is found, we safely proceed to find its closest <p> parent
+      const logoWrapper = logoElement.closest('p');
+      if (logoWrapper) {
+          logoWrapper.classList.add('header-logo');
+          // If you need to make the logo a link, do it here
+      }
+  } else {
+      // Fallback or warning if the logo is missing
+      console.warn('Header logo not found in the block content.');
   }
 
 
-  // Create the login button
+  // 3. Create the login button
   const loginButton = document.createElement('button');
   loginButton.classList.add('header-login-button');
   loginButton.textContent = 'Login';
-  // If it's a link, it would be an <a> tag instead of <button>
-  // loginButton.addEventListener('click', () => { /* Handle login click */ });
   block.append(loginButton); // Add to the far right
 
-  // Add a class for overall layout to the block itself
+  // 4. Set the final layout class
   block.classList.add('header-layout');
 }
