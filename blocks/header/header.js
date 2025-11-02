@@ -2,24 +2,44 @@ export default function decorate(block) {
   // 1. Create the menu icon (three lines)
   const menuIcon = document.createElement('div');
   menuIcon.classList.add('header-menu-icon');
-  menuIcon.innerHTML = '<span></span><span></span><span></span>'; 
+  // Using spans for the three lines (hamburger icon)
+  menuIcon.innerHTML = '<span></span><span></span><span></span>';
   block.prepend(menuIcon); // Add to the far left
 
-  // 2. Find the logo image and wrap it (FIX APPLIED HERE)
-  const logoElement = block.querySelector('picture, img');
+  // 2. Find the logo content
+  const logoWrapper = Array.from(block.children).find((child) => {
+    // Exclude the menu icon we just added
+    if (child.classList.contains('header-menu-icon')) return false;
 
-  if (logoElement) {
-      // If the logo element is found, we safely proceed to find its closest <p> parent
-      const logoWrapper = logoElement.closest('p');
-      if (logoWrapper) {
-          logoWrapper.classList.add('header-logo');
-          // If you need to make the logo a link, do it here
+    // Exclude elements that look like button or placeholder containers
+    if (child.nodeName === 'BUTTON' || child.querySelector('button')) return false;
+
+    // The content is likely the remaining <p> or <div> element
+    return true;
+  });
+
+  if (logoWrapper) {
+    // Check if the wrapper contains the actual image or picture element
+    const logoElement = logoWrapper.querySelector('picture, img');
+    if (logoElement) {
+      // Found the image content. Apply the logo class for centering.
+      logoWrapper.classList.add('header-logo');
+      
+      // OPTIONAL: Ensure the image is wrapped in a link if it's not already
+      if (logoWrapper.querySelector('a') === null) {
+        const logoLink = document.createElement('a');
+        logoLink.href = '/'; // Link to homepage
+        logoWrapper.replaceChild(logoLink, logoWrapper.firstElementChild);
+        logoLink.appendChild(logoElement.closest('p, div, a'));
       }
+    } else {
+      // Logo text/image not found inside the wrapper element
+      console.warn('Header logo not found inside the block content element.');
+    }
   } else {
-      // Fallback or warning if the logo is missing
-      console.warn('Header logo not found in the block content.');
+    // Fallback if the logo container itself is missing
+    console.warn('Header logo content element not found in the block content.');
   }
-
 
   // 3. Create the login button
   const loginButton = document.createElement('button');
