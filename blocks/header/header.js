@@ -1,71 +1,61 @@
-/**
- * header.js – AEM Blocks (Franklin) – fully tolerant of Google‑Docs markup
- */
- export default function decorate(block) {
-  /* -------------------------------------------------
-   * 1. Hamburger (left)
-   * ------------------------------------------------- */
+export default function decorate(block) {
+  // Prevent double run
+  if (block.classList.contains('header-layout')) return;
+
+  // 1. Hamburger (left)
   const menuIcon = document.createElement('div');
   menuIcon.className = 'header-menu-icon';
   menuIcon.innerHTML = '<span></span><span></span><span></span>';
   block.prepend(menuIcon);
 
-  /* -------------------------------------------------
-   * 2. Find *any* element that contains an image
-   * ------------------------------------------------- */
-  const candidates = Array.from(block.children).filter(
-    el => !el.classList.contains('header-menu-icon')
-          && el.nodeName !== 'BUTTON'
-          && !el.querySelector('button')
-  );
+  // 2. Get all cells (table → div > div > div)
+  const cells = Array.from(block.children);
 
-  // 2a – look for an <img> or <picture> anywhere inside the candidate
-  let logoWrapper = candidates.find(el => {
-    return el.querySelector('img') || el.querySelector('picture');
-  });
+  // In nav.docx: cells[0] = left, cells[1] = middle (logo), cells[2] = right
+  const logoCell = cells[1];
 
-  // 2b – fallback: first remaining element (text logo)
-  if (!logoWrapper && candidates.length) {
-    logoWrapper = candidates[0];
-  }
+  if (logoCell) {
+    logoCell.classList.add('header-logo');
 
-  if (logoWrapper) {
-    logoWrapper.classList.add('header-logo');
+    // Find <img> OR <picture> (AEM uses <picture> for optimized images)
+    const img = logoCell.querySelector('img');
+    const picture = logoCell.querySelector('picture');
 
-    // ---- Ensure the *actual* image element is visible ----
-    const imgEl = logoWrapper.querySelector('img') || logoWrapper.querySelector('picture');
-    if (imgEl) {
-      // Force the image to render (Google Docs sometimes adds display:none on spans)
-      imgEl.style.display = 'block';
-      imgEl.style.maxHeight = '48px';          // optional – keep logo size sane
-      imgEl.style.margin = '0 auto';
-    }
+    if (picture || img) {
+      // Force visibility
+      const displayEl = picture || img;
+      displayEl.style.display = 'block';
+      displayEl.style.maxHeight = '48px';
+      displayEl.style.margin = '0 auto';
 
-    // ---- Wrap everything in <a href="/"> if not already ----
-    const existingLink = logoWrapper.querySelector('a');
-    const link = existingLink || document.createElement('a');
-    if (!existingLink) {
-      link.href = '/';
-      // Move *all* children of logoWrapper into the link
-      while (logoWrapper.firstChild) {
-        link.appendChild(logoWrapper.firstChild);
+      // If <picture> is used, ensure <img> inside it is visible
+      if (picture) {
+        const fallbackImg = picture.querySelector('img');
+        if (fallbackImg) {
+          fallbackImg.style.maxHeight = '48px';
+          fallbackImg.style.display = 'block';
+          fallbackImg.style.margin = '0 auto';
+        }
       }
-      logoWrapper.appendChild(link);
     }
-  } else {
-    console.warn('Header logo element not found in the block.');
+
+    // Wrap in <a href="/"> if not already
+    if (!logoCell.querySelector('a')) {
+      const link = document.createElement('a');
+      link.href = '/';
+      while (logoCell.firstChild) {
+        link.appendChild(logoCell.firstChild);
+      }
+      logoCell.appendChild(link);
+    }
   }
 
-  /* -------------------------------------------------
-   * 3. Login button (right)
-   * ------------------------------------------------- */
+  // 3. Login button (right)
   const loginBtn = document.createElement('button');
   loginBtn.className = 'header-login-button';
   loginBtn.textContent = 'Login';
   block.append(loginBtn);
 
-  /* -------------------------------------------------
-   * 4. Layout class
-   * ------------------------------------------------- */
+  // 4. Layout
   block.classList.add('header-layout');
 }
