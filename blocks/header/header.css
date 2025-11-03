@@ -1,92 +1,36 @@
-/*
- * Main header block layout
- */
- .header.block {
-  /* Use CSS Grid for a robust 3-column layout */
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr; /* 3 equal columns */
-  align-items: center;
-  width: 100%;
-  padding: 16px 20px;
-  box-sizing: border-box;
-}
-
-/* * 1. Hamburger Menu (Left)
- */
-.header-menu-icon {
+.header-layout {
   display: flex;
-  flex-direction: column;
-  gap: 5px;
-  cursor: pointer;
-  width: 24px;
-  height: 21px; /* 3*3px + 2*5px */
-  justify-self: start; /* Aligns this item to the start (left) */
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem 1rem;
 }
 
+/* Hamburger */
 .header-menu-icon span {
-  width: 100%;
+  display: block;
+  width: 24px;
   height: 3px;
-  background-color: #000;
-  border-radius: 2px;
-  transition: transform 0.3s;
+  background: currentColor;
+  margin: 5px 0;
+  transition: .2s;
 }
 
-/* * 2. Logo (Center)
- */
+/* Logo centering */
 .header-logo {
-  justify-self: center; /* Aligns this item to the center */
-  padding: 0;
-  margin: 0;
+  flex: 0 1 auto;
+  text-align: center;
 }
-
-.header-logo,
-.header-logo p,
-.header-logo a {
-  display: block; /* Ensure the link and wrapper take up space */
-  line-height: 1; /* Remove extra paragraph spacing */
-  margin: 0;
-}
-
 .header-logo img,
 .header-logo picture {
-  display: block;
-  max-height: 40px; /* Control the logo height */
-  width: auto;
+  max-height: 48px;
 }
 
-/* * 3. Login Button (Right)
- */
+/* Login button */
 .header-login-button {
-  justify-self: end; /* Aligns this item to the end (right) */
-  background-color: #000;
+  padding: 0.5rem 1rem;
+  background: #0066cc;
   color: #fff;
   border: none;
-  border-radius: 20px;
-  padding: 8px 24px;
-  font-size: var(--body-font-size-s);
-  font-weight: 700;
+  border-radius: 4px;
   cursor: pointer;
-  transition: opacity 0.3s;
-}
-
-.header-login-button:hover {
-  opacity: 0.8;
-}
-
-/*
- * Responsive (Mobile)
- */
-@media (max-width: 768px) {
-  .header.block {
-    padding: 12px 16px;
-  }
-
-  .header-logo img,
-  .header-logo picture {
-    max-height: 30px; /* Make logo a bit smaller */
-  }
-
-  .header-login-button {
-    padding: 6px 16px;
-  }
 }

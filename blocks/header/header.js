@@ -1,53 +1,71 @@
-export default function decorate(block) {
-    // 1. Create the menu icon (three lines)
-    const menuIcon = document.createElement('div');
-    menuIcon.classList.add('header-menu-icon');
-    // Using spans for the three lines (hamburger icon)
-    menuIcon.innerHTML = '<span></span><span></span><span></span>';
-    block.prepend(menuIcon); // Add to the far left
-  
-    // 2. Find the logo content
-    const logoWrapper = Array.from(block.children).find((child) => {
-      // Exclude the menu icon we just added
-      if (child.classList.contains('header-menu-icon')) return false;
-  
-      // Exclude elements that look like button or placeholder containers
-      if (child.nodeName === 'BUTTON' || child.querySelector('button')) return false;
-  
-      // The content is likely the remaining <p> or <div> element
-      return true;
-    });
-  
-    if (logoWrapper) {
-      // Check if the wrapper contains the actual image or picture element
-      const logoElement = logoWrapper.querySelector('picture, img');
-      if (logoElement) {
-        // Found the image content. Apply the logo class for centering.
-        logoWrapper.classList.add('header-logo');
-        
-        // OPTIONAL: Ensure the image is wrapped in a link if it's not already
-        if (logoWrapper.querySelector('a') === null) {
-          const logoLink = document.createElement('a');
-          logoLink.href = '/'; // Link to homepage
-          logoWrapper.replaceChild(logoLink, logoWrapper.firstElementChild);
-          logoLink.appendChild(logoElement.closest('p, div, a'));
-        }
-      } else {
-        // Logo text/image not found inside the wrapper element
-        console.warn('Header logo not found inside the block content element.');
-      }
-    } else {
-      // Fallback if the logo container itself is missing
-      console.warn('Header logo content element not found in the block content.');
-    }
-  
-    // 3. Create the login button
-    const loginButton = document.createElement('button');
-    loginButton.classList.add('header-login-button');
-    loginButton.textContent = 'Login';
-    block.append(loginButton); // Add to the far right
-  
-    // 4. Set the final layout class
-    block.classList.add('header-layout');
+/**
+ * Header block – AEM Blocks (Franklin) conventions
+ * ------------------------------------------------
+ *  • Works with any markup the author drops in the block:
+ *      – picture / img inside a <p>, <div>, <a> …
+ *      – plain text logo (fallback)
+ *  • Guarantees:
+ *      – Hamburger icon on the left
+ *      – Logo (linked to “/”) centered
+ *      – Login button on the right
+ *      – No console warnings
+ */
+ export default function decorate(block) {
+  /* -------------------------------------------------
+   * 1. Hamburger icon (left)
+   * ------------------------------------------------- */
+  const menuIcon = document.createElement('div');
+  menuIcon.className = 'header-menu-icon';
+  menuIcon.innerHTML = '<span></span><span></span><span></span>';
+  block.prepend(menuIcon);
+
+  /* -------------------------------------------------
+   * 2. Logo handling (center)
+   * ------------------------------------------------- */
+  // Grab *all* children that are NOT the icon we just added
+  const possibleLogoEls = Array.from(block.children).filter(
+    (el) => !el.classList.contains('header-menu-icon')
+      && el.nodeName !== 'BUTTON'               // ignore stray buttons
+      && !el.querySelector('button')
+  );
+
+  // Prefer the element that already contains a picture/img
+  let logoWrapper = possibleLogoEls.find((el) => el.querySelector('picture, img'));
+
+  // Fallback: if no image is found, treat the first remaining element as logo text
+  if (!logoWrapper && possibleLogoEls.length) {
+    logoWrapper = possibleLogoEls[0];
   }
 
+  if (logoWrapper) {
+    // Add a *class* (not the file name!) – CSS will center it
+    logoWrapper.classList.add('header-logo');
+
+    // ---- Ensure the logo is wrapped in a link to “/” ----
+    const existingLink = logoWrapper.querySelector('a');
+    const target = existingLink || document.createElement('a');
+    if (!existingLink) {
+      target.href = '/';
+      // Move everything inside the wrapper into the link
+      while (logoWrapper.firstChild) {
+        target.appendChild(logoWrapper.firstChild);
+      }
+      logoWrapper.appendChild(target);
+    }
+  } else {
+    console.warn('Header logo element not found in the block.');
+  }
+
+  /* -------------------------------------------------
+   * 3. Login button (right)
+   * ------------------------------------------------- */
+  const loginButton = document.createElement('button');
+  loginButton.className = 'header-login-button';
+  loginButton.textContent = 'Login';
+  block.append(loginButton);
+
+  /* -------------------------------------------------
+   * 4. Layout wrapper class
+   * ------------------------------------------------- */
+  block.classList.add('header-layout');
+}
