@@ -75,9 +75,7 @@ function buildAutoBlocks(main) {
  * Decorates the main element.
  * @param {Element} main The main element
  */
-// eslint-disable-next-line import/prefer-default-export
 export function decorateMain(main) {
-  // hopefully forward compatible button decoration
   decorateButtons(main);
   decorateIcons(main);
   buildAutoBlocks(main);
@@ -100,7 +98,6 @@ async function loadEager(doc) {
   }
 
   try {
-    /* if desktop (proxy for fast connection) or fonts already loaded, load fonts.css */
     if (window.innerWidth >= 900 || sessionStorage.getItem('fonts-loaded')) {
       loadFonts();
     }
@@ -133,11 +130,50 @@ async function loadLazy(doc) {
  * without impacting the user experience.
  */
 function loadDelayed() {
-  // eslint-disable-next-line import/no-cycle
   window.setTimeout(() => import('./delayed.js'), 3000);
-  // load anything that can be postponed to the latest here
 }
 
+/* -------------------------------------------------------------
+   NEW loadHeader – pulls the real header table from /nav
+   ------------------------------------------------------------- */
+async function loadHeader(header) {
+  try {
+    // 1. Fetch the plain HTML of nav.docx
+    const navResp = await fetch('/nav.plain.html');
+    if (!navResp.ok) throw new Error('nav.docx not found');
+
+    const navHtml = await navResp.text();
+    const parser = new DOMParser();
+    const navDoc = parser.parseFromString(navHtml, 'text/html');
+
+    // 2. Find the .header.block in nav.docx
+    const sourceHeader = navDoc.querySelector('.header.block');
+    if (!sourceHeader) {
+      console.warn('No .header block in nav.docx – using empty fallback');
+      const fallback = buildBlock('header', '');
+      header.append(fallback);
+      decorateBlock(fallback);
+      return loadBlock(fallback);
+    }
+
+    // 3. Clone it into the current page
+    const cloned = sourceHeader.cloneNode(true);
+    header.appendChild(cloned);
+    decorateBlock(cloned);
+    return loadBlock(cloned);
+  } catch (err) {
+    console.error('Failed to load header from /nav', err);
+    // Fallback to empty block
+    const fallback = buildBlock('header', '');
+    header.append(fallback);
+    decorateBlock(fallback);
+    return loadBlock(fallback);
+  }
+}
+
+/* -------------------------------------------------------------
+   loadPage – unchanged
+   ------------------------------------------------------------- */
 async function loadPage() {
   await loadEager(document);
   await loadLazy(document);
