@@ -116,10 +116,17 @@ function toggleMenu(nav, navSections, forceExpanded = null) {
  * @param {Element} block The header block element
  */
 export default async function decorate(block) {
-  // load nav as fragment
-  const navMeta = getMetadata('nav');
-  const navPath = navMeta ? new URL(navMeta, window.location).pathname : '/nav';
-  const fragment = await loadFragment(navPath);
+  let fragment;
+  try {
+    // load nav as fragment
+    const navMeta = getMetadata('nav');
+    const navPath = navMeta ? new URL(navMeta, window.location).pathname : '/nav';
+    console.log(`Attempting to load nav fragment from: ${navPath}`);
+    fragment = await loadFragment(navPath);
+  } catch (e) {
+    console.error('Failed to load nav fragment. Will use placeholder.', e);
+    fragment = new DocumentFragment(); // Ensure fragment is a valid (empty) fragment
+  }
 
   // decorate nav DOM
   block.textContent = '';
@@ -127,8 +134,9 @@ export default async function decorate(block) {
   nav.id = 'nav';
 
   // --- [FIX] ---
-  // Add placeholder content if fragment is empty
-  if (!fragment.firstElementChild) {
+  // Add placeholder content if fragment is empty or failed to load
+  if (!fragment || !fragment.firstElementChild) {
+    console.log('Nav fragment is empty. Using placeholder HTML.');
     nav.innerHTML = `
       <div>
         <div><p><a href="/">MyLogo</a></p></div>
@@ -153,6 +161,7 @@ export default async function decorate(block) {
       </div>
     `;
   } else {
+    console.log('Nav fragment loaded successfully. Using fragment content.');
     // Fragment loaded successfully, use it
     while (fragment.firstElementChild) nav.append(fragment.firstElementChild);
   }
@@ -214,4 +223,6 @@ export default async function decorate(block) {
   navWrapper.className = 'nav-wrapper';
   navWrapper.append(nav);
   block.append(navWrapper);
+  console.log('Header block appended to DOM.');
 }
+
