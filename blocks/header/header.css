@@ -1,8 +1,4 @@
 .header-layout {
-  container-type: inline-size;
-}
-
-.header-wrapper {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -18,28 +14,18 @@
   gap: 5px;
   cursor: pointer;
 }
+.header-menu-icon span { width:24px; height:3px; background:#000; }
 
-.header-menu-icon span {
-  width: 24px;
-  height: 3px;
-  background: #000;
-}
-
-.header-logo {
+.header-layout > div:nth-child(2) {
   flex: 1;
   text-align: center;
 }
 
-.header-logo a {
-  display: inline-block;
-}
+.header-layout a { display: inline-block; }
 
-/* Critical: Force AEM <picture> and <img> to show */
-.header-logo picture,
-.header-logo img {
+.header-layout picture,
+.header-layout img {
   max-height: 48px !important;
-  height: auto !important;
-  width: auto !important;
   display: block !important;
   margin: 0 auto !important;
 }
