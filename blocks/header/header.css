@@ -1,29 +1,48 @@
-/*
- * Main header block layout
- */
- .header.block {
-  /* Use CSS Grid for a robust 3-column layout */
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr; /* 3 equal columns */
-  align-items: center;
+/* header and nav layout */
+header .nav-wrapper {
+  background-color: var(--background-color);
   width: 100%;
-  padding: 16px 20px;
-  box-sizing: border-box;
+  z-index: 2;
+  position: fixed;
 }
 
-/* * 1. Hamburger Menu (Left)
- */
-.header-menu-icon {
+header nav {
+  box-sizing: border-box;
+  display: grid;
+  /* Define grid areas for clarity */
+  grid-template-areas: 'hamburger brand tools';
+  grid-template-columns: 1fr 1fr 1fr; /* 3 equal columns */
+  align-items: center;
+  margin: auto;
+  max-width: 1248px;
+  height: var(--nav-height, 64px); /* Use CSS var for height */
+  padding: 0 20px;
+  font-family: var(--body-font-family);
+}
+
+header nav p {
+  margin: 0;
+  line-height: 1;
+}
+
+header nav a:any-link {
+  color: currentcolor;
+  text-decoration: none;
+}
+
+/* 1. hamburger */
+header nav .nav-hamburger {
+  grid-area: hamburger;
+  justify-self: start; /* Aligns this item to the start (left) */
   display: flex;
   flex-direction: column;
   gap: 5px;
   cursor: pointer;
   width: 24px;
   height: 21px; /* 3*3px + 2*5px */
-  justify-self: start; /* Aligns this item to the start (left) */
 }
 
-.header-menu-icon span {
+header nav .nav-hamburger span {
   width: 100%;
   height: 3px;
   background-color: #000;
@@ -31,33 +50,44 @@
   transition: transform 0.3s;
 }
 
-/* * 2. Logo (Center)
- */
-.header-logo {
+/* Hide hamburger on desktop */
+@media (width >= 900px) {
+  header nav .nav-hamburger {
+    display: none;
+    visibility: hidden;
+  }
+}
+
+/* 2. brand / logo */
+header .nav-brand {
+  grid-area: brand;
   justify-self: center; /* Aligns this item to the center */
   padding: 0;
   margin: 0;
 }
 
-.header-logo,
-.header-logo p,
-.header-logo a {
-  display: block; /* Ensure the link and wrapper take up space */
-  line-height: 1; /* Remove extra paragraph spacing */
+header nav .nav-brand p,
+header nav .nav-brand a {
+  display: block;
+  line-height: 1;
   margin: 0;
 }
 
-.header-logo img,
-.header-logo picture {
+header nav .nav-brand img,
+header nav .nav-brand picture {
   display: block;
   max-height: 40px; /* Control the logo height */
   width: auto;
+  margin: 0 auto; /* Ensure centered */
 }
 
-/* * 3. Login Button (Right)
- */
+/* 3. tools / login button */
+header nav .nav-tools {
+   grid-area: tools;
+   justify-self: end;
+}
+
 .header-login-button {
-  justify-self: end; /* Aligns this item to the end (right) */
   background-color: #000;
   color: #fff;
   border: none;
@@ -67,26 +97,74 @@
   font-weight: 700;
   cursor: pointer;
   transition: opacity 0.3s;
+  display: inline-block; /* Ensure it renders like a button */
 }
 
 .header-login-button:hover {
   opacity: 0.8;
 }
 
-/*
- * Responsive (Mobile)
- */
-@media (max-width: 768px) {
-  .header.block {
-    padding: 12px 16px;
+
+/* Mobile Styles */
+@media (width < 900px) {
+  /* Mobile nav menu is open */
+  header nav[aria-expanded='true'] {
+    /* Adjust grid for open menu */
+    grid-template-areas:
+      'hamburger brand tools'
+      'sections sections sections';
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: var(--nav-height, 64px) 1fr;
+    overflow-y: auto;
+    min-height: 100dvh;
+  }
+  
+  header nav .nav-sections {
+    grid-area: sections;
+    display: none; /* Hidden by default */
+    flex: 1 1 auto;
+    align-self: start;
   }
 
-  .header-logo img,
-  .header-logo picture {
-    max-height: 30px; /* Make logo a bit smaller */
+  header nav[aria-expanded='true'] .nav-sections {
+    display: block; /* Shown when menu is open */
   }
 
-  .header-login-button {
-    padding: 6px 16px;
+  header nav .nav-sections ul {
+    list-style: none;
+    padding-left: 0;
+    font-size: var(--body-font-size-s);
+  }
+
+  header nav .nav-sections ul > li {
+    font-weight: 500;
+    padding: 8px 0;
+  }
+}
+
+/* Desktop Styles */
+@media (width >= 900px) {
+  header nav {
+     /* Desktop nav sections are visible by default */
+    display: grid;
+    grid-template-areas: 'brand sections tools';
+    grid-template-columns: auto 1fr auto;
+    gap: 0 32px;
+  }
+
+  header nav .nav-sections {
+    grid-area: sections;
+    display: block;
+    visibility: visible;
+    white-space: nowrap;
+    justify-self: center; /* Center the nav links */
+  }
+
+  header nav .nav-sections ul {
+    display: flex;
+    gap: 24px;
+    margin: 0;
+    list-style: none;
+    padding: 0;
   }
 }
