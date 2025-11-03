@@ -1,0 +1,35 @@
+.site-header-layout {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem 1rem;
+  min-height: 60px;
+  background: #fff;
+}
+
+.site-header-menu-icon {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+.site-header-menu-icon span { width:24px; height:3px; background:#000; }
+
+.site-header-layout > div:nth-child(2) { flex:1; text-align:center; }
+.site-header-layout a { display:inline-block; }
+
+.site-header-layout picture,
+.site-header-layout img {
+  max-height:48px !important;
+  display:block !important;
+  margin:0 auto !important;
+}
+
+.site-header-login-button {
+  padding:0.5rem 1rem;
+  background:#000;
+  color:#fff;
+  border:none;
+  border-radius:4px;
+  cursor:pointer;
+  font-weight:600;
+}
