@@ -1,61 +1,77 @@
+// blocks/header/header.js
+import { readBlockConfig } from '../../scripts/aem.js';
+
+/**
+ * Extracts image src from pasted Google Docs image
+ */
+function getImageSrc(cell) {
+  const img = cell.querySelector('img');
+  if (img && img.src && img.src.startsWith('data:')) {
+    return img.src; // AEM will convert data: URLs to real ones
+  }
+  return null;
+}
+
+/**
+ * Main decorate function
+ */
 export default function decorate(block) {
-  // Prevent double run
+  // Prevent double execution
   if (block.classList.contains('header-layout')) return;
 
-  // 1. Hamburger (left)
-  const menuIcon = document.createElement('div');
-  menuIcon.className = 'header-menu-icon';
-  menuIcon.innerHTML = '<span></span><span></span><span></span>';
-  block.prepend(menuIcon);
-
-  // 2. Get all cells (table → div > div > div)
+  // === 1. Parse the 1×3 table (only in nav.docx) ===
   const cells = Array.from(block.children);
-
-  // In nav.docx: cells[0] = left, cells[1] = middle (logo), cells[2] = right
-  const logoCell = cells[1];
-
-  if (logoCell) {
-    logoCell.classList.add('header-logo');
-
-    // Find <img> OR <picture> (AEM uses <picture> for optimized images)
-    const img = logoCell.querySelector('img');
-    const picture = logoCell.querySelector('picture');
-
-    if (picture || img) {
-      // Force visibility
-      const displayEl = picture || img;
-      displayEl.style.display = 'block';
-      displayEl.style.maxHeight = '48px';
-      displayEl.style.margin = '0 auto';
-
-      // If <picture> is used, ensure <img> inside it is visible
-      if (picture) {
-        const fallbackImg = picture.querySelector('img');
-        if (fallbackImg) {
-          fallbackImg.style.maxHeight = '48px';
-          fallbackImg.style.display = 'block';
-          fallbackImg.style.margin = '0 auto';
-        }
-      }
-    }
-
-    // Wrap in <a href="/"> if not already
-    if (!logoCell.querySelector('a')) {
-      const link = document.createElement('a');
-      link.href = '/';
-      while (logoCell.firstChild) {
-        link.appendChild(logoCell.firstChild);
-      }
-      logoCell.appendChild(link);
-    }
+  if (cells.length < 3) {
+    console.warn('Header block expects 1×3 table in nav.docx');
+    return;
   }
 
-  // 3. Login button (right)
-  const loginBtn = document.createElement('button');
-  loginBtn.className = 'header-login-button';
-  loginBtn.textContent = 'Login';
-  block.append(loginBtn);
+  const [, logoCell] = cells; // middle cell
+  const logoSrc = getImageSrc(logoCell);
 
-  // 4. Layout
+  // === 2. Clear block and rebuild ===
+  block.innerHTML = '';
   block.classList.add('header-layout');
+
+  const header = document.createElement('div');
+  header.className = 'header-wrapper';
+
+  // --- Hamburger ---
+  const menu = document.createElement('div');
+  menu.className = 'header-menu-icon';
+  menu.innerHTML = '<span></span><span></span><span></span>';
+  header.appendChild(menu);
+
+  // --- Logo ---
+  const logoContainer = document.createElement('div');
+  logoContainer.className = 'header-logo';
+
+  if (logoSrc) {
+    const link = document.createElement('a');
+    link.href = '/';
+
+    const img = document.createElement('img');
+    img.src = logoSrc;
+    img.alt = 'Logo';
+    img.className = 'logo-img';
+
+    link.appendChild(img);
+    logoContainer.appendChild(link);
+  } else {
+    // Fallback text
+    const link = document.createElement('a');
+    link.href = '/';
+    link.textContent = 'Home';
+    logoContainer.appendChild(link);
+  }
+  header.appendChild(logoContainer);
+
+  // --- Login ---
+  const login = document.createElement('button');
+  login.className = 'header-login-button';
+  login.textContent = 'Login';
+  header.appendChild(login);
+
+  // === 3. Append to block ===
+  block.appendChild(header);
 }
