@@ -1,120 +1,63 @@
-/* header and nav layout */
-header .nav-wrapper {
-  background-color: var(--background-color);
-  width: 100%;
-  z-index: 2;
-  position: fixed;
-}
-
-header nav {
-  box-sizing: border-box;
+/*
+ * Main header block layout
+ */
+ .header.block {
+  /* Use CSS Grid for a robust 3-column layout */
   display: grid;
-  /* Define grid areas for clarity */
-  grid-template-areas: 'hamburger brand tools';
   grid-template-columns: 1fr 1fr 1fr; /* 3 equal columns */
   align-items: center;
-  margin: auto;
-  max-width: 1248px;
-  height: var(--nav-height, 64px); 
-  padding: 0 20px;
-  font-family: var(--body-font-family);
-}
-
-header nav p {
-  margin: 0;
-  line-height: 1;
-}
-
-header nav a:any-link {
-  color: currentcolor;
-  text-decoration: none;
-}
-
-/* * 1. HAMBURGER 
- */
-header nav .nav-hamburger {
-  grid-area: hamburger;
-  justify-self: start; /* Aligns to the left */
-  height: 22px;
-  display: flex;
-  align-items: center;
-}
-
-header nav .nav-hamburger button {
-  height: 22px;
-  margin: 0;
-  border: 0;
-  border-radius: 0;
-  padding: 0;
-  background-color: var(--background-color);
-  color: inherit;
-  overflow: initial;
-}
-
-header nav .nav-hamburger-icon,
-header nav .nav-hamburger-icon::before,
-header nav .nav-hamburger-icon::after {
+  width: 100%;
+  padding: 16px 20px;
   box-sizing: border-box;
-  display: block;
-  position: relative;
-  width: 20px;
 }
 
-header nav .nav-hamburger-icon::before,
-header nav .nav-hamburger-icon::after {
-  content: '';
-  position: absolute;
-  background: currentcolor;
-}
-
-header nav[aria-expanded='false'] .nav-hamburger-icon,
-header nav[aria-expanded='false'] .nav-hamburger-icon::before,
-header nav[aria-expanded='false'] .nav-hamburger-icon::after {
-  height: 2px;
-  border-radius: 2px;
-  background: currentcolor;
-}
-
-header nav[aria-expanded='false'] .nav-hamburger-icon::before {
-  top: -6px;
-}
-
-header nav[aria-expanded='false'] .nav-hamburger-icon::after {
-  top: 6px;
-}
-
-/* * 2. BRAND / LOGO 
+/* * 1. Hamburger Menu (Left)
  */
-header nav .nav-brand {
-  grid-area: brand;
-  justify-self: center; /* Aligns to the center */
+.header-menu-icon {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  cursor: pointer;
+  width: 24px;
+  height: 21px; /* 3*3px + 2*5px */
+  justify-self: start; /* Aligns this item to the start (left) */
+}
+
+.header-menu-icon span {
+  width: 100%;
+  height: 3px;
+  background-color: #000;
+  border-radius: 2px;
+  transition: transform 0.3s;
+}
+
+/* * 2. Logo (Center)
+ */
+.header-logo {
+  justify-self: center; /* Aligns this item to the center */
   padding: 0;
   margin: 0;
 }
 
-header nav .nav-brand p,
-header nav .nav-brand a {
-  display: block;
-  line-height: 1;
+.header-logo,
+.header-logo p,
+.header-logo a {
+  display: block; /* Ensure the link and wrapper take up space */
+  line-height: 1; /* Remove extra paragraph spacing */
   margin: 0;
 }
 
-header nav .nav-brand img,
-header nav .nav-brand picture {
+.header-logo img,
+.header-logo picture {
   display: block;
-  max-height: 40px; 
+  max-height: 40px; /* Control the logo height */
   width: auto;
-  margin: 0 auto; 
 }
 
-/* * 3. TOOLS / LOGIN BUTTON 
+/* * 3. Login Button (Right)
  */
-header nav .nav-tools {
-   grid-area: tools;
-   justify-self: end; /* Aligns to the right */
-}
-
 .header-login-button {
+  justify-self: end; /* Aligns this item to the end (right) */
   background-color: #000;
   color: #fff;
   border: none;
@@ -124,72 +67,26 @@ header nav .nav-tools {
   font-weight: 700;
   cursor: pointer;
   transition: opacity 0.3s;
-  display: inline-block;
 }
 
 .header-login-button:hover {
   opacity: 0.8;
 }
 
-
-/* * RESPONSIVE STYLES 
+/*
+ * Responsive (Mobile)
  */
-@media (width < 900px) {
-  /* Mobile nav menu is open */
-  header nav[aria-expanded='true'] {
-    grid-template-areas:
-      'hamburger brand tools'
-      'sections sections sections';
-    grid-template-columns: 1fr 1fr 1fr;
-    grid-template-rows: var(--nav-height, 64px) 1fr;
-    overflow-y: auto;
-    min-height: 100dvh;
-  }
-  
-  header nav .nav-sections {
-    grid-area: sections;
-    display: none; /* Hidden by default */
+@media (max-width: 768px) {
+  .header.block {
+    padding: 12px 16px;
   }
 
-  header nav[aria-expanded='true'] .nav-sections {
-    display: block; /* Shown when menu is open */
+  .header-logo img,
+  .header-logo picture {
+    max-height: 30px; /* Make logo a bit smaller */
   }
 
-  header nav .nav-sections ul {
-    list-style: none;
-    padding-left: 0;
-    font-size: var(--body-font-size-s);
-  }
-
-  header nav .nav-sections ul > li {
-    font-weight: 500;
-    padding: 8px 0;
-  }
-}
-
-@media (width >= 900px) {
-  /* SHOW hamburger on desktop */
-  header nav .nav-hamburger {
-    display: block;      /* <-- CHANGED */
-    visibility: visible; /* <-- CHANGED */
-  }
-
-  /* HIDE nav sections on desktop */
-  header nav .nav-sections {
-    grid-area: sections;
-    display: none;       /* <-- CHANGED */
-    visibility: hidden;  /* <-- CHANGED */
-    white-space: nowrap;
-    justify-self: center;
-  }
-
-  /* This rule below doesn't really matter now since its
-     parent (.nav-sections) is hidden, but you can leave it. */
-  header nav .nav-sections ul {
-    display: flex;
-    gap: 24px;
-    margin: 0;
-    list-style: none;
-    padding: 0;
+  .header-login-button {
+    padding: 6px 16px;
   }
 }
