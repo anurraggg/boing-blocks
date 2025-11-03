@@ -38,8 +38,9 @@ function closeOnFocusLost(e) {
 
 function openOnKeydown(e) {
   const focused = document.activeElement;
-  const isNavDrop = focused.className === 'nav-drop';
+  const isNavDrop = focused.classList.contains('nav-drop'); // Use classList.contains
   if (isNavDrop && (e.code === 'Enter' || e.code === 'Space')) {
+    e.preventDefault(); // Prevent page scroll
     const dropExpanded = focused.getAttribute('aria-expanded') === 'true';
     // eslint-disable-next-line no-use-before-define
     toggleAllNavSections(focused.closest('.nav-sections'));
@@ -69,6 +70,8 @@ function toggleAllNavSections(sections, expanded = false) {
  * @param {*} forceExpanded Optional param to force nav expand behavior when not null
  */
 function toggleMenu(nav, navSections, forceExpanded = null) {
+  if (!navSections) return; // Add guard clause in case navSections isn't found
+
   const expanded = forceExpanded !== null
     ? !forceExpanded
     : nav.getAttribute('aria-expanded') === 'true';
@@ -76,9 +79,7 @@ function toggleMenu(nav, navSections, forceExpanded = null) {
   document.body.style.overflowY = (expanded || isDesktop.matches) ? '' : 'hidden';
   nav.setAttribute('aria-expanded', expanded ? 'false' : 'true');
 
-  // [FIX 1] Always collapse all nav sections when toggling the main mobile menu
-  // The original logic (expanded || isDesktop.matches ? 'false' : 'true')
-  // incorrectly set all dropdowns to 'true' when opening the mobile menu.
+  // [FIX 1 from previous turn] Always collapse all nav sections when toggling
   toggleAllNavSections(navSections, false);
 
   button.setAttribute('aria-label', expanded ? 'Open navigation' : 'Close navigation');
@@ -124,7 +125,38 @@ export default async function decorate(block) {
   block.textContent = '';
   const nav = document.createElement('nav');
   nav.id = 'nav';
-  while (fragment.firstElementChild) nav.append(fragment.firstElementChild);
+
+  // --- [FIX] ---
+  // Add placeholder content if fragment is empty
+  if (!fragment.firstElementChild) {
+    nav.innerHTML = `
+      <div>
+        <div><p><a href="/">MyLogo</a></p></div>
+      </div>
+      <div>
+        <div class="default-content-wrapper">
+          <ul>
+            <li><a href="/link1">Link 1</a></li>
+            <li>
+              <a href="/link2">Dropdown</a>
+              <ul>
+                <li><a href="/sub1">Sub Link 1</a></li>
+                <li><a href="/sub2">Sub Link 2</a></li>
+              </ul>
+            </li>
+            <li><a href="/link3">Link 3</a></li>
+          </ul>
+        </div>
+      </div>
+      <div>
+        <div><p class="button-container"><a href="/login" class="button">Log In</a></p></div>
+      </div>
+    `;
+  } else {
+    // Fragment loaded successfully, use it
+    while (fragment.firstElementChild) nav.append(fragment.firstElementChild);
+  }
+  // --- [END FIX] ---
 
   const classes = ['brand', 'sections', 'tools'];
   classes.forEach((c, i) => {
@@ -135,6 +167,7 @@ export default async function decorate(block) {
   const navBrand = nav.querySelector('.nav-brand');
   const brandLink = navBrand.querySelector('.button');
   if (brandLink) {
+    // Clean up brand link if it's styled as a button
     brandLink.className = '';
     brandLink.closest('.button-container').className = '';
   }
@@ -144,10 +177,13 @@ export default async function decorate(block) {
     navSections.querySelectorAll(':scope .default-content-wrapper > ul > li').forEach((navSection) => {
       if (navSection.querySelector('ul')) navSection.classList.add('nav-drop');
 
-      // [FIX 2] The click listener must handle both mobile and desktop.
-      // The original code wrapped this logic in `if (isDesktop.matches)`,
-      // which prevented mobile dropdowns from working at all.
-      navSection.addEventListener('click', () => {
+      // [FIX 2 from previous turn] Handle mobile and desktop clicks
+      navSection.addEventListener('click', (e) => {
+        // Prevent click on link from triggering dropdown toggle
+        if (e.target.tagName === 'A' && isDesktop.matches) {
+          return;
+        }
+
         const expanded = navSection.getAttribute('aria-expanded') === 'true';
         if (isDesktop.matches) {
           // Desktop: close all others, then toggle this one
