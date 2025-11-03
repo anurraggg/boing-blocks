@@ -45,7 +45,7 @@
     const existingLink = logoWrapper.querySelector('a');
     const target = existingLink || document.createElement('a');
     if (!existingLink) {
-      target.href = '/';
+      target.href = '/icons/lets-boing-logo.png';
       // Move everything inside the wrapper into the link
       while (logoWrapper.firstChild) {
         target.appendChild(logoWrapper.firstChild);
