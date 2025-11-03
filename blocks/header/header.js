@@ -1,5 +1,5 @@
 // blocks/header/header.js
-import { createOptimizedPicture, readBlockConfig } from '../../scripts/aem.js';
+import { createOptimizedPicture } from '../../scripts/aem.js';
 
 export default function decorate(block) {
   console.log('HEADER DECORATE: STARTED', block);
@@ -10,56 +10,56 @@ export default function decorate(block) {
   }
   block.dataset.headerReady = 'true';
 
-  // === 1. Read the 1×3 table from nav.docx ===
-  const config = readBlockConfig(block);
-  console.log('HEADER DECORATE: readBlockConfig →', config);
+  // === 1. Get the 3 cells from the 1×3 table in nav.docx ===
+  const cells = block.querySelectorAll(':scope > div > div');
+  console.log('HEADER DECORATE: Found cells →', cells.length, cells);
 
-  // === 2. Clear and rebuild ===
-  block.innerHTML = '';
-  block.classList.add('header-layout');
+  if (cells.length < 3) {
+    console.warn('HEADER DECORATE: Expected 3 cells. Is nav.docx a 1×3 table?');
+    return;
+  }
 
-  const wrapper = document.createElement('div');
-  wrapper.className = 'header-wrapper';
+  const logoCell = cells[1]; // middle cell
+  console.log('HEADER DECORATE: Middle cell →', logoCell);
 
-  // --- Hamburger ---
+  // === 2. Find <img> in middle cell ===
+  const img = logoCell.querySelector('img');
+  console.log('HEADER DECORATE: Found <img> →', img);
+
+  if (!img) {
+    console.warn('HEADER DECORATE: No <img> in middle cell. Did you paste the image?');
+  } else {
+    console.log('HEADER DECORATE: Image src →', img.src);
+    const picture = createOptimizedPicture(img.src, 'Logo', false);
+    img.replaceWith(picture);
+    console.log('HEADER DECORATE: Replaced with <picture>');
+  }
+
+  // === 3. Add hamburger (left) ===
   const menu = document.createElement('div');
   menu.className = 'header-menu-icon';
   menu.innerHTML = '<span></span><span></span><span></span>';
-  wrapper.appendChild(menu);
+  block.prepend(menu);
+  console.log('HEADER DECORATE: Hamburger added');
 
-  // --- Logo (from middle cell) ---
-  const logoDiv = document.createElement('div');
-  logoDiv.className = 'header-logo';
-
-  // Find the image in the original block (before clearing)
-  const originalBlock = block.cloneNode(true);
-  const img = originalBlock.querySelector('img');
-  console.log('HEADER DECORATE: Found original <img> →', img);
-
-  if (img) {
-    const picture = createOptimizedPicture(img.src, 'Logo', false);
-    const link = document.createElement('a');
-    link.href = '/';
-    link.appendChild(picture);
-    logoDiv.appendChild(link);
-    console.log('HEADER DECORATE: Logo added with <picture>');
-  } else {
-    // Fallback
-    const link = document.createElement('a');
-    link.href = '/';
-    link.textContent = 'Home';
-    logoDiv.appendChild(link);
-    console.warn('HEADER DECORATE: No image found in nav.docx');
+  // === 4. Wrap logo in <a href="/"> ===
+  const link = document.createElement('a');
+  link.href = '/';
+  while (logoCell.firstChild) {
+    link.appendChild(logoCell.firstChild);
   }
+  logoCell.appendChild(link);
+  console.log('HEADER DECORATE: Logo linked to /');
 
-  wrapper.appendChild(logoDiv);
-
-  // --- Login ---
+  // === 5. Add login button (right) ===
   const login = document.createElement('button');
   login.className = 'header-login-button';
   login.textContent = 'Login';
-  wrapper.appendChild(login);
+  block.append(login);
+  console.log('HEADER DECORATE: Login button added');
 
-  block.appendChild(wrapper);
+  // === 6. Add layout class ===
+  block.classList.add('header-layout');
+  console.log('HEADER DECORATE: Layout class added');
   console.log('HEADER DECORATE: FINAL BLOCK →', block.innerHTML);
 }
