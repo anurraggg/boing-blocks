@@ -168,21 +168,23 @@ header nav .nav-tools {
 }
 
 @media (width >= 900px) {
-  /* Hide hamburger on desktop */
+  /* SHOW hamburger on desktop */
   header nav .nav-hamburger {
-    display: none;
-    visibility: hidden;
-  }
-  
-  /* Show nav sections on desktop */
-  header nav .nav-sections {
-    grid-area: sections;
-    display: block;
-    visibility: visible;
-    white-space: nowrap;
-    justify-self: center; 
+    display: block;      /* <-- CHANGED */
+    visibility: visible; /* <-- CHANGED */
   }
 
+  /* HIDE nav sections on desktop */
+  header nav .nav-sections {
+    grid-area: sections;
+    display: none;       /* <-- CHANGED */
+    visibility: hidden;  /* <-- CHANGED */
+    white-space: nowrap;
+    justify-self: center;
+  }
+
+  /* This rule below doesn't really matter now since its
+     parent (.nav-sections) is hidden, but you can leave it. */
   header nav .nav-sections ul {
     display: flex;
     gap: 24px;
