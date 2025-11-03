@@ -15,7 +15,7 @@ header nav {
   align-items: center;
   margin: auto;
   max-width: 1248px;
-  height: var(--nav-height, 64px); /* Use CSS var for height */
+  height: var(--nav-height, 64px); 
   padding: 0 20px;
   font-family: var(--body-font-family);
 }
@@ -30,38 +30,64 @@ header nav a:any-link {
   text-decoration: none;
 }
 
-/* 1. hamburger */
+/* * 1. HAMBURGER 
+ */
 header nav .nav-hamburger {
   grid-area: hamburger;
-  justify-self: start; /* Aligns this item to the start (left) */
+  justify-self: start; /* Aligns to the left */
+  height: 22px;
   display: flex;
-  flex-direction: column;
-  gap: 5px;
-  cursor: pointer;
-  width: 24px;
-  height: 21px; /* 3*3px + 2*5px */
+  align-items: center;
 }
 
-header nav .nav-hamburger span {
-  width: 100%;
-  height: 3px;
-  background-color: #000;
+header nav .nav-hamburger button {
+  height: 22px;
+  margin: 0;
+  border: 0;
+  border-radius: 0;
+  padding: 0;
+  background-color: var(--background-color);
+  color: inherit;
+  overflow: initial;
+}
+
+header nav .nav-hamburger-icon,
+header nav .nav-hamburger-icon::before,
+header nav .nav-hamburger-icon::after {
+  box-sizing: border-box;
+  display: block;
+  position: relative;
+  width: 20px;
+}
+
+header nav .nav-hamburger-icon::before,
+header nav .nav-hamburger-icon::after {
+  content: '';
+  position: absolute;
+  background: currentcolor;
+}
+
+header nav[aria-expanded='false'] .nav-hamburger-icon,
+header nav[aria-expanded='false'] .nav-hamburger-icon::before,
+header nav[aria-expanded='false'] .nav-hamburger-icon::after {
+  height: 2px;
   border-radius: 2px;
-  transition: transform 0.3s;
+  background: currentcolor;
 }
 
-/* Hide hamburger on desktop */
-@media (width >= 900px) {
-  header nav .nav-hamburger {
-    display: none;
-    visibility: hidden;
-  }
+header nav[aria-expanded='false'] .nav-hamburger-icon::before {
+  top: -6px;
 }
 
-/* 2. brand / logo */
-header .nav-brand {
+header nav[aria-expanded='false'] .nav-hamburger-icon::after {
+  top: 6px;
+}
+
+/* * 2. BRAND / LOGO 
+ */
+header nav .nav-brand {
   grid-area: brand;
-  justify-self: center; /* Aligns this item to the center */
+  justify-self: center; /* Aligns to the center */
   padding: 0;
   margin: 0;
 }
@@ -76,15 +102,16 @@ header nav .nav-brand a {
 header nav .nav-brand img,
 header nav .nav-brand picture {
   display: block;
-  max-height: 40px; /* Control the logo height */
+  max-height: 40px; 
   width: auto;
-  margin: 0 auto; /* Ensure centered */
+  margin: 0 auto; 
 }
 
-/* 3. tools / login button */
+/* * 3. TOOLS / LOGIN BUTTON 
+ */
 header nav .nav-tools {
    grid-area: tools;
-   justify-self: end;
+   justify-self: end; /* Aligns to the right */
 }
 
 .header-login-button {
@@ -97,7 +124,7 @@ header nav .nav-tools {
   font-weight: 700;
   cursor: pointer;
   transition: opacity 0.3s;
-  display: inline-block; /* Ensure it renders like a button */
+  display: inline-block;
 }
 
 .header-login-button:hover {
@@ -105,11 +132,11 @@ header nav .nav-tools {
 }
 
 
-/* Mobile Styles */
+/* * RESPONSIVE STYLES 
+ */
 @media (width < 900px) {
   /* Mobile nav menu is open */
   header nav[aria-expanded='true'] {
-    /* Adjust grid for open menu */
     grid-template-areas:
       'hamburger brand tools'
       'sections sections sections';
@@ -122,8 +149,6 @@ header nav .nav-tools {
   header nav .nav-sections {
     grid-area: sections;
     display: none; /* Hidden by default */
-    flex: 1 1 auto;
-    align-self: start;
   }
 
   header nav[aria-expanded='true'] .nav-sections {
@@ -142,22 +167,20 @@ header nav .nav-tools {
   }
 }
 
-/* Desktop Styles */
 @media (width >= 900px) {
-  header nav {
-     /* Desktop nav sections are visible by default */
-    display: grid;
-    grid-template-areas: 'brand sections tools';
-    grid-template-columns: auto 1fr auto;
-    gap: 0 32px;
+  /* Hide hamburger on desktop */
+  header nav .nav-hamburger {
+    display: none;
+    visibility: hidden;
   }
-
+  
+  /* Show nav sections on desktop */
   header nav .nav-sections {
     grid-area: sections;
     display: block;
     visibility: visible;
     white-space: nowrap;
-    justify-self: center; /* Center the nav links */
+    justify-self: center; 
   }
 
   header nav .nav-sections ul {
