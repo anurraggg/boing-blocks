@@ -13,17 +13,16 @@
 }
 
 .header-menu-icon {
-  cursor: pointer;
   display: flex;
   flex-direction: column;
   gap: 5px;
+  cursor: pointer;
 }
 
 .header-menu-icon span {
   width: 24px;
   height: 3px;
   background: #000;
-  transition: 0.2s;
 }
 
 .header-logo {
@@ -35,11 +34,14 @@
   display: inline-block;
 }
 
-.logo-img {
-  max-height: 48px;
-  height: auto;
-  width: auto;
-  display: block;
+/* Critical: Force AEM <picture> and <img> to show */
+.header-logo picture,
+.header-logo img {
+  max-height: 48px !important;
+  height: auto !important;
+  width: auto !important;
+  display: block !important;
+  margin: 0 auto !important;
 }
 
 .header-login-button {
