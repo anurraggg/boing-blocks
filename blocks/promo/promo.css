@@ -1,0 +1,58 @@
+/* Styles for the whole block wrapper */
+.promo-wrapper {
+    max-width: 400px; /* Set a max-width for the card */
+    margin: 1rem auto; /* Center the card */
+  }
+  
+  /* Styles for the block itself */
+  .promo.block {
+    border: 1px solid #eee;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+    overflow: hidden; /* Ensures image corners are rounded */
+    background-color: var(--background-color, #fff);
+  }
+  
+  /* Styles for the image cell */
+  .promo .promo-image {
+    line-height: 0; /* Removes extra space below image */
+  }
+  
+  .promo .promo-image img {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+    display: block;
+  }
+  
+  /* Styles for the text cell */
+  .promo .promo-body {
+    padding: 1rem 1.25rem;
+  }
+  
+  /* * Style any heading (h1-h6) inside the body.
+  * If no heading is present, these styles are simply ignored.
+  */
+  .promo .promo-body h1,
+  .promo .promo-body h2,
+  .promo .promo-body h3,
+  .promo .promo-body h4,
+  .promo .promo-body h5,
+  .promo .promo-body h6 {
+    font-size: var(--heading-font-size-s);
+    margin-top: 0;
+    margin-bottom: 0.5rem;
+  }
+  
+  /* Style any paragraph inside the body */
+  .promo .promo-body p {
+    font-size: var(--body-font-size-s);
+    margin-top: 0;
+    margin-bottom: 1rem;
+  }
+  
+  /* Style the last element in the body to have no bottom margin */
+  .promo .promo-body > *:last-child {
+    margin-bottom: 0;
+  }
