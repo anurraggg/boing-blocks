@@ -68,42 +68,11 @@ function buildVideoCard(row) {
   const videoLink = row.children[0]?.querySelector('a')?.href || row.children[0]?.textContent.trim();
   const title = row.children[1]?.textContent.trim();
   const description = row.children[2]?.textContent.trim();
-  const initialLikes = row.children[3]?.textContent.trim() || '0';
 
   // 2. Build Video Player
   const videoPlayer = createVideoPlayer(videoLink);
 
-  // 3. Build Footer
-  const footer = document.createElement('div');
-  footer.classList.add('video-card-footer');
-
-  const likesWrapper = document.createElement('div');
-  likesWrapper.classList.add('video-card-likes');
-  const likeButton = document.createElement('button');
-  likeButton.classList.add('like-button');
-  likeButton.setAttribute('aria-label', 'Like this post');
-  likeButton.innerHTML = '<span class="icon icon-like"></span>';
-  const likeCount = document.createElement('span');
-  likeCount.classList.add('like-count');
-  likeCount.textContent = initialLikes;
-
-  likeButton.addEventListener('click', (e) => {
-    e.stopPropagation();
-    const isLiked = likeButton.classList.toggle('liked');
-    const currentLikes = parseInt(likeCount.textContent, 10);
-    likeCount.textContent = isLiked ? currentLikes + 1 : currentLikes - 1;
-  });
-
-  likesWrapper.append(likeButton, likeCount);
-
-  const shareButton = document.createElement('button');
-  shareButton.classList.add('share-button');
-  shareButton.setAttribute('aria-label', 'Share this post');
-  shareButton.innerHTML = '<span class="icon icon-share"></span>';
-
-  footer.append(likesWrapper, shareButton);
-
-  // 4. Build Text Content
+  // 3. Build Text Content
   const textWrapper = document.createElement('div');
   textWrapper.classList.add('video-card-text');
   if (title) {
@@ -117,8 +86,8 @@ function buildVideoCard(row) {
     textWrapper.append(p);
   }
 
-  // 5. Assemble Card
-  li.append(videoPlayer, footer, textWrapper);
+  // 4. Assemble Card (Video Player + Text)
+  li.append(videoPlayer, textWrapper);
   return li;
 }
 

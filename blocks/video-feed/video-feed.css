@@ -93,64 +93,9 @@
   .mute-button.is-muted .icon-unmute { display: none; }
   
   
-  /* Card Footer */
-  .video-card-footer {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0.75rem 1rem;
-  }
-  
-  .video-card-likes {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-  }
-  
-  .like-count {
-    font-size: var(--body-font-size-s);
-    font-weight: bold;
-    color: #333;
-  }
-  
-  .like-button,
-  .share-button {
-    background: none;
-    border: none;
-    cursor: pointer;
-    padding: 0.25rem;
-    line-height: 0;
-  }
-  
-  .like-button .icon > *,
-  .share-button .icon > * {
-    width: 22px;
-    height: 22px;
-    color: #555;
-    fill: #555;
-    transition: all 0.2s;
-  }
-  
-  .like-button:hover .icon > *,
-  .share-button:hover .icon > * {
-    color: #000;
-    fill: #000;
-    transform: scale(1.1);
-  }
-  
-  /* Like button active state */
-  button.like-button.liked .icon > * {
-    color: blue;
-    fill: blue;
-  }
-  button.like-button.liked:hover .icon > * {
-    color: blue;
-    fill: blue;
-  }
-  
   /* Card Text */
   .video-card-text {
-    padding: 0 1rem 1rem;
+    padding: 1rem;
   }
   
   .video-card-text h3 {
