@@ -1,6 +1,6 @@
 export default function decorate(block) {
     // Get all rows except the first one (block name)
-    const rows = [...block.children].slice(1);
+    const rows = [...block.children]
     block.textContent = ''; // Clear the block to rebuild it
   
     rows.forEach((row) => {
