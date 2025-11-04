@@ -7,12 +7,12 @@
   
   /* This is the gray, rounded "pill" container */
   .button-toggle.block {
-    max-width: 400px;
+    /* max-width: 400px; */ /* <-- REMOVED this line */
+    display: inline-flex; /* <-- CHANGED from 'flex' */
     padding: 6px;
     background-color: #f0f0f0;
     border: 1px solid #ddd;
     border-radius: 99px; /* A large number to make it a pill */
-    display: flex;
   }
   
   /* This is the flex container for the buttons */
@@ -23,8 +23,8 @@
   
   /* Style for all buttons */
   .button-toggle-list button {
-    flex: 1; /* Make buttons share space equally */
-    padding: 0.75rem 1rem;
+    /* flex: 1; */ /* <-- REMOVED this line */
+    padding: 0.75rem 1.25rem; /* Increased padding a bit for balance */
     border: none;
     border-radius: 99px;
     background-color: transparent;
