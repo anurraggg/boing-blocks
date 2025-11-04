@@ -1,0 +1,49 @@
+/* This centers the whole block on the page */
+.button-toggle-wrapper {
+    display: flex;
+    justify-content: center;
+    margin: 1rem auto;
+  }
+  
+  /* This is the gray, rounded "pill" container */
+  .button-toggle.block {
+    max-width: 400px;
+    padding: 6px;
+    background-color: #f0f0f0;
+    border: 1px solid #ddd;
+    border-radius: 99px; /* A large number to make it a pill */
+    display: flex;
+  }
+  
+  /* This is the flex container for the buttons */
+  .button-toggle-list {
+    display: flex;
+    width: 100%;
+  }
+  
+  /* Style for all buttons */
+  .button-toggle-list button {
+    flex: 1; /* Make buttons share space equally */
+    padding: 0.75rem 1rem;
+    border: none;
+    border-radius: 99px;
+    background-color: transparent;
+    color: #333;
+    font-weight: bold;
+    font-size: var(--body-font-size-s);
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+    white-space: nowrap;
+  }
+  
+  /* Style for the INACTIVE button on hover */
+  .button-toggle-list button:not(.active):hover {
+    background-color: #e0e0e0;
+  }
+  
+  /* Style for the ACTIVE button (black) */
+  .button-toggle-list button.active {
+    background-color: #000;
+    color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
