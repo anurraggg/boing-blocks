@@ -13,7 +13,36 @@
     background-color: var(--background-color, #fff);
   }
   
-  /* Styles for the image cell */
+  /* Reset default margins for content inside the block */
+  .promo.block h1,
+  .promo.block h2,
+  .promo.block h3,
+  .promo.block h4,
+  .promo.block h5,
+  .promo.block h6,
+  .promo.block p {
+    margin: 0;
+  }
+  
+  /* Style for the Title row */
+  .promo .promo-title {
+    padding: 1rem 1.25rem 0.5rem;
+  }
+  
+  .promo .promo-title h1,
+  .promo .promo-title h2,
+  .promo .promo-title h3 {
+    font-size: var(--heading-font-size-s);
+  }
+  
+  /* Style for the first description row (above image) */
+  .promo .promo-description-1 {
+    padding: 0 1.25rem 1rem;
+    font-size: var(--body-font-size-s);
+    color: #555;
+  }
+  
+  /* Style for the image row */
   .promo .promo-image {
     line-height: 0; /* Removes extra space below image */
   }
@@ -26,33 +55,13 @@
     display: block;
   }
   
-  /* Styles for the text cell */
-  .promo .promo-body {
+  /* Style for the second description row (below image) */
+  .promo .promo-description-2 {
     padding: 1rem 1.25rem;
-  }
-  
-  /* * Style any heading (h1-h6) inside the body.
-  * If no heading is present, these styles are simply ignored.
-  */
-  .promo .promo-body h1,
-  .promo .promo-body h2,
-  .promo .promo-body h3,
-  .promo .promo-body h4,
-  .promo .promo-body h5,
-  .promo .promo-body h6 {
-    font-size: var(--heading-font-size-s);
-    margin-top: 0;
-    margin-bottom: 0.5rem;
-  }
-  
-  /* Style any paragraph inside the body */
-  .promo .promo-body p {
     font-size: var(--body-font-size-s);
-    margin-top: 0;
-    margin-bottom: 1rem;
   }
   
-  /* Style the last element in the body to have no bottom margin */
-  .promo .promo-body > *:last-child {
-    margin-bottom: 0;
+  /* Hide any rows that the JS detected as empty */
+  .promo .promo-empty {
+    display: none;
   }

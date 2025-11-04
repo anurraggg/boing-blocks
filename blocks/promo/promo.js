@@ -1,24 +1,33 @@
 import { createOptimizedPicture } from '../../scripts/aem.js';
 
 export default function decorate(block) {
-  // Go through each row in the authored table
-  [...block.children].forEach((row) => {
-    // Go through each cell in the row
-    [...row.children].forEach((cell) => {
+  const rows = [...block.children];
+
+  // Define the class names for each row in order
+  const rowClasses = ['promo-title', 'promo-description-1', 'promo-image', 'promo-description-2'];
+
+  rows.forEach((row, index) => {
+    // Add the appropriate class to each row
+    if (rowClasses[index]) {
+      row.classList.add(rowClasses[index]);
+    }
+
+    const cell = row.children[0];
+    
+    // Check if the cell is empty
+    if (cell && !cell.textContent.trim() && !cell.querySelector('picture')) {
+      row.classList.add('promo-empty');
+    }
+
+    // Handle the image row specifically
+    if (rowClasses[index] === 'promo-image') {
       const picture = cell.querySelector('picture');
-      
       if (picture) {
-        // This cell has the image. Add the 'promo-image' class.
-        cell.classList.add('promo-image');
-        
-        // Optimize the image for responsiveness
         const img = picture.querySelector('img');
-        cell.innerHTML = ''; // Clear the cell
+        // Optimize the picture and replace the cell's content
+        cell.innerHTML = ''; 
         cell.append(createOptimizedPicture(img.src, img.alt, false, [{ width: '750' }]));
-      } else {
-        // This cell has the text. Add the 'promo-body' class.
-        cell.classList.add('promo-body');
       }
-    });
+    }
   });
 }
