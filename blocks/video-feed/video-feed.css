@@ -1,0 +1,166 @@
+/* Main block wrapper */
+.video-feed-wrapper {
+    max-width: 650px;
+    margin: 2rem auto;
+  }
+  
+  /* List of cards */
+  .video-feed-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    grid-template-columns: 1fr; /* 1 column by default */
+    gap: 2rem;
+  }
+  
+  /* On larger screens, show 2 columns */
+  @media (min-width: 600px) {
+    .video-feed-list {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+  
+  /* Individual card styling */
+  .video-card {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+    background-color: var(--background-color, #fff);
+  }
+  
+  /* Video Player */
+  .video-card-player {
+    position: relative;
+    line-height: 0; /* Removes extra space */
+    background-color: #000;
+  }
+  
+  .video-card-player video {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 9 / 16;
+    object-fit: cover;
+  }
+  
+  /* Video overlay buttons */
+  .play-button,
+  .mute-button {
+    position: absolute;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+  }
+  
+  .play-button {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgba(0, 0, 0, 0.4);
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .play-button .icon > * {
+    fill: white;
+    width: 30px;
+    height: 30px;
+    /* Add a slight offset to center the play icon */
+    margin-left: 4px; 
+  }
+  
+  .mute-button {
+    bottom: 10px;
+    right: 10px;
+  }
+  
+  .mute-button .icon > * {
+    fill: white;
+    width: 20px;
+    height: 20px;
+  }
+  
+  /* Mute button icon toggle */
+  .mute-button .icon-mute { display: none; }
+  .mute-button .icon-unmute { display: block; }
+  .mute-button.is-muted .icon-mute { display: block; }
+  .mute-button.is-muted .icon-unmute { display: none; }
+  
+  
+  /* Card Footer */
+  .video-card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem 1rem;
+  }
+  
+  .video-card-likes {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  
+  .like-count {
+    font-size: var(--body-font-size-s);
+    font-weight: bold;
+    color: #333;
+  }
+  
+  .like-button,
+  .share-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.25rem;
+    line-height: 0;
+  }
+  
+  .like-button .icon > *,
+  .share-button .icon > * {
+    width: 22px;
+    height: 22px;
+    color: #555;
+    fill: #555;
+    transition: all 0.2s;
+  }
+  
+  .like-button:hover .icon > *,
+  .share-button:hover .icon > * {
+    color: #000;
+    fill: #000;
+    transform: scale(1.1);
+  }
+  
+  /* Like button active state */
+  button.like-button.liked .icon > * {
+    color: blue;
+    fill: blue;
+  }
+  button.like-button.liked:hover .icon > * {
+    color: blue;
+    fill: blue;
+  }
+  
+  /* Card Text */
+  .video-card-text {
+    padding: 0 1rem 1rem;
+  }
+  
+  .video-card-text h3 {
+    font-size: var(--body-font-size-m);
+    font-weight: bold;
+    margin: 0 0 0.25rem;
+  }
+  
+  .video-card-text p {
+    font-size: var(--body-font-size-s);
+    color: #555;
+    margin: 0;
+  }
