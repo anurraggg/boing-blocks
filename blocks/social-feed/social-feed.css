@@ -1,0 +1,108 @@
+/* Main block wrapper */
+.social-feed-wrapper {
+    max-width: 650px;
+    margin: 2rem auto;
+  }
+  
+  /* Header section */
+  .social-feed-header {
+    padding-bottom: 1rem;
+    margin-bottom: 1.5rem;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  .social-feed-title h3 {
+    font-size: var(--heading-font-size-m);
+    margin: 0;
+  }
+  
+  .social-feed-description p {
+    font-size: var(--body-font-size-s);
+    color: #555;
+    margin: 0.25rem 0 0;
+  }
+  
+  /* List of cards */
+  .social-feed-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    grid-template-columns: 1fr; /* 1 column by default */
+    gap: 1.5rem;
+  }
+  
+  /* On larger screens, show 2 columns */
+  @media (min-width: 600px) {
+    .social-feed-list {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+  
+  /* Individual card styling */
+  .social-card {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .social-card-image img {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    display: block;
+  }
+  
+  .social-card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem 1rem;
+    background-color: var(--background-color, #fff);
+  }
+  
+  .social-card-likes {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  
+  .like-count {
+    font-size: var(--body-font-size-s);
+    font-weight: bold;
+    color: #333;
+  }
+  
+  /* Button styles */
+  .like-button,
+  .share-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.25rem;
+    line-height: 0;
+  }
+  
+  .like-button .icon,
+  .share-button .icon {
+    width: 22px;
+    height: 22px;
+    color: #555;
+    transition: all 0.2s;
+  }
+  
+  .like-button:hover .icon,
+  .share-button:hover .icon {
+    color: #000;
+    transform: scale(1.1);
+  }
+  
+  /* Liked state */
+  .like-button.liked .icon {
+    color: red;
+    fill: red;
+  }
