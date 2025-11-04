@@ -1,8 +1,8 @@
 import { createOptimizedPicture } from '../../scripts/aem.js';
 
 export default function decorate(block) {
-  // Get all rows except the first one (block name)
-  const rows = [...block.children].slice(1);
+  // Get all rows (starting from the first content row)
+  const rows = [...block.children];
 
   // Row 0: Icon
   const iconRow = rows[0];
