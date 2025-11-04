@@ -1,0 +1,33 @@
+/* The wrapper provides the main gray bottom border */
+.tabs-wrapper {
+    border-bottom: 1px solid #ccc;
+  }
+  
+  /* This container holds the buttons */
+  .tabs-list {
+    display: flex;
+    gap: 1.5rem; /* Space between "Latest" and "TMS Shorts" */
+  }
+  
+  /* Style for all tab buttons */
+  .tabs-button {
+    background: none;
+    border: none;
+    padding: 0 0.25rem 1rem; /* Padding on bottom to create space for the line */
+    font-size: var(--body-font-size-m);
+    color: #555;
+    font-weight: 500;
+    cursor: pointer; /* This makes the cursor a pointer on hover */
+    
+    /* This creates the space for the active border */
+    border-bottom: 2px solid transparent;
+    /* This pulls the button down to overlap the wrapper's border */
+    margin-bottom: -1px; 
+  }
+  
+  /* Style for the ACTIVE tab */
+  .tabs-button.active {
+    color: #000;
+    font-weight: bold;
+    border-bottom-color: #000; /* This is the black active line */
+  }
