@@ -1,0 +1,90 @@
+/* --- Styles for Standard Accordion --- */
+
+.content-toggle.block .toggle-item {
+    border-bottom: 1px solid #e0e0e0;
+  }
+  
+  /* The clickable title button */
+  .content-toggle.block .toggle-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 1.25rem 0.5rem;
+    font-size: var(--body-font-size-l); /* Larger title */
+    font-weight: bold;
+    color: #333;
+    width: 100%;
+    text-align: left;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+  }
+  
+  /* Add a + icon that rotates */
+  .content-toggle.block .toggle-button::after {
+    content: '+';
+    font-size: 1.5rem;
+    font-weight: 300;
+    color: #888;
+    transition: transform 0.2s ease-in-out;
+  }
+  
+  /* Rotate the + icon to a X when active */
+  .content-toggle.block .toggle-item.active .toggle-button::after {
+    transform: rotate(45deg);
+  }
+  
+  /* The content panel (hidden by default) */
+  .content-toggle.block .toggle-panel {
+    display: none; /* JS toggles this */
+    padding: 0 0.5rem 1.25rem;
+    font-size: var(--body-font-size-m);
+    line-height: 1.6;
+  }
+  
+  /* When active, show the panel */
+  .content-toggle.block .toggle-item.active .toggle-panel {
+    display: block;
+  }
+  
+  /* --- Styles for (grid) Variant --- */
+  
+  .content-toggle.grid.block {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    text-align: center;
+    border-bottom: 1px solid #e0e0e0;
+    padding-bottom: 1rem;
+  }
+  
+  /* Remove default div styles */
+  .content-toggle.grid.block > div {
+    margin: 0;
+  }
+  
+  /* Header row (Lucky Colour, etc.) */
+  .content-toggle.grid.block .toggle-grid-header > div {
+    font-size: var(--body-font-size-s);
+    color: #888;
+    padding: 0.5rem;
+  }
+  
+  /* Value row (Red, 6, etc.) */
+  .content-toggle.grid.block .toggle-grid-values > div {
+    font-size: var(--body-font-size-l);
+    font-weight: bold;
+    padding: 0.5rem;
+  }
+  
+  /* Special style for the red color box */
+  .content-toggle.grid.block .toggle-grid-values > div:first-child::before {
+    content: '';
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    background-color: red;
+    border: 1px solid #a00;
+    margin-right: 8px;
+    vertical-align: middle;
+  }
