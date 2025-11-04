@@ -1,0 +1,72 @@
+/* Main block wrapper */
+.confirmation-wrapper {
+    max-width: 400px;
+    margin: 2rem auto;
+  }
+  
+  /* Styles for the block itself */
+  .confirmation.block {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* This centers all the content */
+    text-align: center;
+  }
+  
+  /* Styles for the icon row */
+  .confirmation .confirmation-icon {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+    /* This is the inner-most yellow circle */
+    background-color: #fdeca6; 
+    border-radius: 50%;
+    width: 128px;
+    height: 128px;
+    box-sizing: border-box;
+    margin-bottom: 2rem;
+  }
+  
+  /* This is the middle circle */
+  .confirmation .confirmation-icon::before {
+    content: '';
+    position: absolute;
+    inset: -15px; /* Creates a 15px ring */
+    background-color: #fef4db; /* Lighter yellow */
+    border-radius: 50%;
+    z-index: -1; /* Sits behind the main icon circle */
+  }
+  
+  /* This is the outer-most circle */
+  .confirmation .confirmation-icon::after {
+    content: '';
+    position: absolute;
+    inset: -30px; /* Creates another 15px ring */
+    background-color: #fefcf2; /* Faintest yellow */
+    border-radius: 50%;
+    z-index: -2; /* Sits behind the middle circle */
+  }
+  
+  /* Style for the icon image itself */
+  .confirmation .confirmation-icon img {
+    width: 64px;
+    height: 64px;
+    object-fit: contain;
+  }
+  
+  /* Style for the heading row */
+  .confirmation .confirmation-heading h1,
+  .confirmation .confirmation-heading h2 {
+    font-size: var(--heading-font-size-m);
+    font-weight: bold;
+    margin: 0 0 0.5rem;
+  }
+  
+  /* Style for the body/description row */
+  .confirmation .confirmation-body p {
+    font-size: var(--body-font-size-s);
+    color: #555;
+    margin: 0;
+    line-height: 1.5;
+  }
