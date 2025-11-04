@@ -51,7 +51,7 @@
     }
   
     // 3. Create a button for each row in the author's table
-    [...block.children].slice(1).forEach((row, i) => { // Skip first row (block name)
+    [...block.children].forEach((row, i) => { // Skip first row (block name)
       const button = document.createElement('button');
       button.classList.add('time-menu-button'); // Renamed
       button.setAttribute('role', 'tab');
