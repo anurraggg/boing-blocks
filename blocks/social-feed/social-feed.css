@@ -87,22 +87,48 @@
     line-height: 0;
   }
   
-  .like-button .icon,
-  .share-button .icon {
+  /* Default (not liked) icon state */
+  .like-button .icon > *,
+  .share-button .icon > *,
+  .like-button svg,
+  .share-button svg {
     width: 22px;
     height: 22px;
     color: #555;
-    transition: all 0.2s;
+    fill: #555;
+    transition: all 0.2s ease;
   }
   
-  .like-button:hover .icon,
-  .share-button:hover .icon {
+  /* Hover state (darker) */
+  .like-button:hover .icon > *,
+  .share-button:hover .icon > *,
+  .like-button:hover svg,
+  .share-button:hover svg {
     color: #000;
+    fill: #000;
     transform: scale(1.1);
   }
   
-  /* Liked state */
-  .like-button.liked .icon {
-    color: red;
-    fill: red;
+  /* --- FIXED LIKED STATE --- */
+  
+  /* Liked (active) state — persist blue even after focus is lost */
+  button.like-button.liked .icon > *,
+  button.like-button.liked svg {
+    color: blue !important;
+    fill: blue !important;
+    transform: scale(1.05);
   }
+  
+  /* Hover effect for liked state (keeps blue color) */
+  button.like-button.liked:hover .icon > *,
+  button.like-button.liked:hover svg {
+    color: blue !important;
+    fill: blue !important;
+    transform: scale(1.1);
+  }
+  
+  /* Optional: remove the focus outline on click */
+  button.like-button:focus {
+    outline: none;
+  }
+  
