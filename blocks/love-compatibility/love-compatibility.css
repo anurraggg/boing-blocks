@@ -1,0 +1,104 @@
+/* Style for the header (H1, p) that comes *before* the block */
+.love-compatibility-header {
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+  
+  .love-compatibility-header h1 {
+    font-size: var(--heading-font-size-l);
+    color: #c00; /* Example red color */
+    margin: 0;
+  }
+  
+  .love-compatibility-header p {
+    font-size: var(--body-font-size-m);
+    color: #333;
+    margin: 0.25rem 0 0;
+  }
+  
+  /* Style for the form block itself */
+  .love-compatibility.block {
+    max-width: 400px;
+    margin: 0 auto;
+  }
+  
+  /* Style for each field (label + input) */
+  .form-field-wrapper {
+    margin-bottom: 1.5rem;
+  }
+  
+  .form-field-wrapper label {
+    display: block;
+    font-size: var(--body-font-size-s);
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+  }
+  
+  /* Wrapper for the input field */
+  .form-input-wrapper {
+    position: relative;
+  }
+  
+  .form-field-wrapper input {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    font-size: var(--body-font-size-m);
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box; /* Important for padding */
+  }
+  
+  /* Specific styles for the date field */
+  .form-input-wrapper .icon-calendar {
+    position: absolute;
+    top: 50%;
+    right: 1rem;
+    transform: translateY(-50%);
+    width: 20px;
+    height: 20px;
+    pointer-events: none; /* Lets you click "through" the icon */
+  }
+  
+  /* Hide the browser's default calendar icon */
+  .form-field-wrapper input[type="date"]::-webkit-calendar-picker-indicator {
+    display: none;
+    -webkit-appearance: none;
+  }
+  
+  /* The heart separator */
+  .form-separator {
+    text-align: center;
+    margin: 2rem 0;
+    border-bottom: 2px dashed #ccc;
+    position: relative;
+  }
+  
+  .form-separator .icon-heart {
+    width: 24px;
+    height: 24px;
+    background-color: var(--background-color, #fff);
+    padding: 0 0.5rem;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #c00; /* Example red color */
+  }
+  
+  /* The submit button */
+  .form-submit-button {
+    width: 100%;
+    padding: 1rem;
+    font-size: var(--body-font-size-m);
+    font-weight: bold;
+    color: white;
+    background-color: #c00; /* Example red color */
+    border: none;
+    border-radius: 99px; /* Pill shape */
+    cursor: pointer;
+    transition: background-color 0.2s;
+  }
+  
+  .form-submit-button:hover {
+    background-color: #a00;
+  }
