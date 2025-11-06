@@ -26,7 +26,7 @@
 .header-menu-icon span {
   width: 100%;
   height: 3px;
-  background-color: red;
+  background-color: black;
   border-radius: 2px;
   transition: transform 0.3s;
 }
