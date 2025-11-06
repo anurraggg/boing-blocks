@@ -1,53 +1,48 @@
 export default function decorate(block) {
-    // 1. Create the menu icon (three lines)
-    const menuIcon = document.createElement('div');
-    menuIcon.classList.add('header-menu-icon');
-    // Using spans for the three lines (hamburger icon)
-    menuIcon.innerHTML = '<span></span><span></span><span></span>';
-    block.prepend(menuIcon); // Add to the far left
-  
-    // 2. Find the logo content
-    const logoWrapper = Array.from(block.children).find((child) => {
-      // Exclude the menu icon we just added
-      if (child.classList.contains('header-menu-icon')) return false;
-  
-      // Exclude elements that look like button or placeholder containers
-      if (child.nodeName === 'BUTTON' || child.querySelector('button')) return false;
-  
-      // The content is likely the remaining <p> or <div> element
-      return true;
-    });
-  
-    if (logoWrapper) {
-      // Check if the wrapper contains the actual image or picture element
-      const logoElement = logoWrapper.querySelector('picture, img');
-      if (logoElement) {
-        // Found the image content. Apply the logo class for centering.
-        logoWrapper.classList.add('header-logo');
-        
-        // OPTIONAL: Ensure the image is wrapped in a link if it's not already
-        if (logoWrapper.querySelector('a') === null) {
-          const logoLink = document.createElement('a');
-          logoLink.href = '/'; // Link to homepage
-          logoWrapper.replaceChild(logoLink, logoWrapper.firstElementChild);
-          logoLink.appendChild(logoElement.closest('p, div, a'));
-        }
-      } else {
-        // Logo text/image not found inside the wrapper element
-        console.warn('Header logo not found inside the block content element.');
-      }
-    } else {
-      // Fallback if the logo container itself is missing
-      console.warn('Header logo content element not found in the block content.');
-    }
-  
-    // 3. Create the login button
-    const loginButton = document.createElement('button');
-    loginButton.classList.add('header-login-button');
-    loginButton.textContent = 'Login';
-    block.append(loginButton); // Add to the far right
-  
-    // 4. Set the final layout class
-    block.classList.add('header-layout');
+  // 1️⃣ Set your logo image path and optional link
+  const logoImageUrl = '/icons/header-logo.png'; // <-- ✅ change this to your image path
+  const logoLinkUrl = '/'; // optional: where the logo should take you when clicked
+
+  // 2️⃣ Create the menu icon (hamburger)
+  const menuIcon = document.createElement('div');
+  menuIcon.classList.add('header-menu-icon');
+  menuIcon.innerHTML = '<span></span><span></span><span></span>';
+  block.prepend(menuIcon);
+
+  // 3️⃣ Try to find a logo wrapper, or create one
+  let logoWrapper = Array.from(block.children).find((child) => {
+    if (child.classList.contains('header-menu-icon')) return false;
+    if (child.nodeName === 'BUTTON' || child.querySelector('button')) return false;
+    return true;
+  });
+
+  if (!logoWrapper) {
+    logoWrapper = document.createElement('div');
+    block.insertBefore(logoWrapper, block.children[1] || null);
   }
 
+  logoWrapper.classList.add('header-logo');
+
+  // 4️⃣ Always create or replace the logo image
+  logoWrapper.innerHTML = ''; // clear any placeholder text
+  const logoImg = document.createElement('img');
+  logoImg.src = logoImageUrl; // ✅ the hardcoded path
+  logoImg.alt = 'Company Logo';
+  logoWrapper.appendChild(logoImg);
+
+  // 5️⃣ Wrap logo in link (so clicking it navigates home)
+  const logoLink = document.createElement('a');
+  logoLink.href = logoLinkUrl;
+  logoLink.appendChild(logoImg);
+  logoWrapper.innerHTML = '';
+  logoWrapper.appendChild(logoLink);
+
+  // 6️⃣ Add a login button at the end
+  const loginButton = document.createElement('button');
+  loginButton.classList.add('header-login-button');
+  loginButton.textContent = 'Login';
+  block.append(loginButton);
+
+  // 7️⃣ Final layout styling class
+  block.classList.add('header-layout');
+}
