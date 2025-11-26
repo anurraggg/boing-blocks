@@ -258,3 +258,40 @@ main .section.highlight {
 .section.feature-card-container{
   padding-top: 35px;
 }
+
+/*  ================================================
+    DESKTOP MODE → Display site inside mobile frame
+    ================================================ */
+    @media (min-width: 1024px) {
+
+      /* Full-page radial yellow background */
+      body {
+        background: url("/icons/boingbg.png") center/cover no-repeat fixed;
+        background-color:#F7CF05; /* fallback */
+      }
+    
+      /* Turn the entire website into a 420px mobile-like layout */
+      main {
+        width: 420px;                     /* Phone width */
+        margin: 0 auto;                   /* Center the phone */
+        background: white;
+        min-height: 100vh;
+        border-radius: 10px;
+        overflow: hidden;
+        position: relative;
+        box-shadow: 0px 0px 60px rgba(0,0,0,0.35);
+      }
+    
+      /* Remove default desktop spacing so layout matches mobile screenshot */
+      main > .section {
+        margin: 0 !important;
+      }
+    
+      header,
+      footer {
+        width: 420px;
+        margin: 0 auto;
+        border-radius: 25px 25px 0 0;
+      }
+    }
+    
